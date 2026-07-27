@@ -317,12 +317,16 @@ h3 {
   border-top: 1px solid var(--line);
   padding-block: 30px;
 }
-.install .wrap {
+.install-lead {
+  font-size: 14px;
+  margin: 0 0 22px;
+}
+.install-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 26px;
 }
-.install .wrap > div {
+.install-grid > div {
   max-width: 340px;
 }
 .install strong {
@@ -333,6 +337,20 @@ h3 {
 .install span {
   font-size: 13px;
   color: var(--ink-soft);
+}
+
+/* ---------- 404 ---------- */
+
+.oops {
+  max-width: 1080px;
+  margin-inline: auto;
+  padding: clamp(40px, 12vh, 120px) var(--pad);
+}
+.oops .sub {
+  margin-bottom: 28px;
+}
+.nav a.brand {
+  text-decoration: none;
 }
 
 /* No footer: the install band is the last thing on the page, so it ends on
@@ -347,7 +365,7 @@ h3 {
   }
   .hero,
   .pillars,
-  .install .wrap {
+  .install-grid {
     grid-template-columns: 1fr;
   }
   .notation {
@@ -356,7 +374,7 @@ h3 {
   .nav nav a:not(:last-child) {
     display: none;
   }
-  .install .wrap > div {
+  .install-grid > div {
     max-width: none;
   }
 }
