@@ -64,8 +64,8 @@
       <p>
         Sync is provided by Supabase, acting as authentication and encrypted storage only. No
         application code runs on the server, and the server performs no processing of journal
-        content, because it cannot.
-        <em class="todo">To confirm: the Supabase project region, so this page can state where the ciphertext physically sits.</em>
+        content, because it cannot. The project is hosted in Supabase's London region, so the
+        ciphertext and your email address sit on servers in the United Kingdom.
       </p>
 
       <h2>What the operator can see</h2>
@@ -114,9 +114,16 @@
         is no lock-in and no need to ask anyone for a copy.
       </p>
       <p>
-        Deletion: signing out wipes the local journal and keys from that device. Deleting your
-        account removes the stored ciphertext and your email address from the server.
-        <em class="todo">To confirm: whether account deletion is self-service in the app today, or currently requires an email request. State whichever is true.</em>
+        Deletion, on your device: signing out wipes the local journal and the keys from that
+        device immediately.
+      </p>
+      <p>
+        Deletion, on the server: there is currently no way to delete an account from inside the
+        app. This is a gap rather than a policy, and it is being fixed. Until it is, email
+        <a href="mailto:privacy@journlet.com">privacy@journlet.com</a> and the account, its
+        encrypted journal data and the email address attached to it will be removed. Given the
+        encryption, what is deleted is ciphertext nobody could read in the first place, but it is
+        your data and you are entitled to have it gone.
       </p>
       <p>
         Recovery: your journal key is the only way back into an encrypted journal. If you lose
@@ -130,15 +137,22 @@
         Under UK data protection law you have the right to access, correct, export and erase your
         personal data, and to complain to the Information Commissioner's Office. In Journlet's
         case the personal data held is limited to your email address, since the journal content
-        is not readable by the operator.
+        is not readable by the operator. Requests go to
+        <a href="mailto:privacy@journlet.com">privacy@journlet.com</a>.
       </p>
 
       <h2>Who is responsible</h2>
+      <p>
+        Journlet is an independent project, not a company. Privacy enquiries, deletion requests
+        and anything else covered by this page:
+        <a href="mailto:privacy@journlet.com">privacy@journlet.com</a>.
+      </p>
       <p class="todo">
-        To complete: the data controller's name and address, a contact email address for privacy
-        enquiries, and whether registration with the ICO applies. These are required before this
-        page can be considered finished, and are the only parts of it I could not write from the
-        architecture.
+        To complete: the data controller's name and postal address. UK GDPR Article 13 requires a
+        privacy notice to identify the controller, and a contact email alone does not satisfy it
+        once there are users other than you. Options are set out in the site README — a company
+        name and registered office if one exists, or a service address if not. Not legal advice;
+        worth twenty minutes of a solicitor's time before launch.
       </p>
 
       <h2>Changes</h2>
