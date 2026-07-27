@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'none'; style-src 'self'; font-src 'self'; img-src 'self' data:; base-uri 'none'; object-src 'none'; form-action 'none'"
+    />
+
+    <title>Privacy — Journlet</title>
+    <meta
+      name="description"
+      content="What Journlet stores, what it cannot read, and what the operator can and cannot see. Journal content is end-to-end encrypted; the server holds ciphertext only."
+    />
+    <link rel="canonical" href="https://www.journlet.com/privacy" />
+    <meta name="theme-color" content="#f5f4ef" />
+    <meta name="referrer" content="no-referrer" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+
+  <body>
+    <header class="nav">
+      <a class="brand" href="/">Journlet</a>
+      <nav aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="https://app.journlet.com/">Open Journlet</a>
+      </nav>
+    </header>
+
+    <main class="prose">
+      <h1>Privacy</h1>
+      <p class="sub">
+        Journlet is built so that the people running it cannot read your journal. This page
+        explains what that means in practice, and is written to be checkable against how the app
+        actually works rather than to sound reassuring.
+      </p>
+
+      <h2>The short version</h2>
+      <ul>
+        <li>Your journal is encrypted on your device before it is sent anywhere.</li>
+        <li>The server stores that ciphertext and your email address. Nothing else.</li>
+        <li>The encryption key never leaves your devices, so the operator cannot decrypt a journal even if compelled to try.</li>
+        <li>There is no analytics, no tracking and no advertising, on this site or in the app.</li>
+        <li>You can use the app fully offline without ever creating an account.</li>
+      </ul>
+
+      <h2>What is stored, and where</h2>
+      <p>
+        On your device: the whole journal, held in your browser's local storage and readable only
+        by the app. This is the primary copy. If you never sign in, it is the only copy, and no
+        data of yours exists anywhere else.
+      </p>
+      <p>
+        On the server, only if you enable sync: your email address, and a sequence of encrypted
+        updates representing your journal. The updates are encrypted with AES-GCM using a key
+        generated on your device and wrapped by a second key that is only ever shown to you as
+        your journal key. Neither key is transmitted to the server, so the stored updates are
+        unreadable to the operator, to the hosting provider, and to anyone who obtains a copy of
+        the database.
+      </p>
+      <p>
+        Sync is provided by Supabase, acting as authentication and encrypted storage only. No
+        application code runs on the server, and the server performs no processing of journal
+        content, because it cannot.
+        <em class="todo">To confirm: the Supabase project region, so this page can state where the ciphertext physically sits.</em>
+      </p>
+
+      <h2>What the operator can see</h2>
+      <p>
+        Being precise about the limits matters more than the reassurance. With sync enabled, the
+        operator can see that an account exists, the email address attached to it, when it last
+        synced, and roughly how much encrypted data it holds. That last point means the
+        approximate size of your journal is visible, though not a word of its content.
+      </p>
+      <p>
+        The operator cannot see your entries, your collections, your reminder times, your tags or
+        anything derived from them. Search and indexing happen entirely on your device, which is
+        a deliberate trade-off: server-side search would require the server to read your journal.
+      </p>
+
+      <h2>Accounts and email</h2>
+      <p>
+        Signing in uses a magic link sent to your email address. There are no passwords. Your
+        email address is used to authenticate you and to send those links, and for nothing else.
+        You will not receive marketing from Journlet.
+      </p>
+
+      <h2>Notifications</h2>
+      <p>
+        Reminders fire locally on your device. Reminder times are part of your encrypted journal
+        and never reach the server in readable form. If server-sent notifications are ever added,
+        this page will be updated before that happens, and the change will be described plainly.
+      </p>
+
+      <h2>This website</h2>
+      <p>
+        This page and the rest of journlet.com are static files. There is no JavaScript, there
+        are no cookies, no analytics and no third-party requests of any kind. The fonts are
+        served from this domain rather than from Google, so visiting this site does not disclose
+        your visit to anyone else.
+      </p>
+      <p>
+        The site is hosted on GitHub Pages, which processes visitors' IP addresses in the course
+        of serving requests, as any web server must. The operator does not receive, retain or
+        analyse that data.
+      </p>
+
+      <h2>Your data, and getting rid of it</h2>
+      <p>
+        Export: the app exports your entire journal as Markdown, generated on your device. There
+        is no lock-in and no need to ask anyone for a copy.
+      </p>
+      <p>
+        Deletion: signing out wipes the local journal and keys from that device. Deleting your
+        account removes the stored ciphertext and your email address from the server.
+        <em class="todo">To confirm: whether account deletion is self-service in the app today, or currently requires an email request. State whichever is true.</em>
+      </p>
+      <p>
+        Recovery: your journal key is the only way back into an encrypted journal. If you lose
+        every device and the key, the data cannot be recovered by anyone, including the operator.
+        This is a consequence of the design rather than an oversight, and the app says so at the
+        point where it matters.
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        Under UK data protection law you have the right to access, correct, export and erase your
+        personal data, and to complain to the Information Commissioner's Office. In Journlet's
+        case the personal data held is limited to your email address, since the journal content
+        is not readable by the operator.
+      </p>
+
+      <h2>Who is responsible</h2>
+      <p class="todo">
+        To complete: the data controller's name and address, a contact email address for privacy
+        enquiries, and whether registration with the ICO applies. These are required before this
+        page can be considered finished, and are the only parts of it I could not write from the
+        architecture.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        Material changes to this page will be described rather than quietly applied. The page
+        history is public in the site's source repository.
+      </p>
+
+      <p class="meta">Last updated 27 July 2026.</p>
+    </main>
+  </body>
+</html>

@@ -3,9 +3,37 @@
    so the site and the app read as one product: same paper, same ink, same
    33px dot pitch, Fraunces for display and Public Sans for text. */
 
+/* Fonts are self-hosted, not loaded from Google. A page whose argument is
+   that nobody can read your journal should not hand every visitor's IP to a
+   third party in order to render its own headline. Both are variable fonts
+   covering the full 100..900 weight range in one file each, and Fraunces
+   carries its optical-size axis so display text matches the app.
+   Sources: @fontsource-variable/fraunces and @fontsource-variable/public-sans
+   (SIL Open Font License, copies in fonts/). No unicode-range: there is only
+   one subset, so per-glyph fallback handles anything the file lacks — the ○
+   event bullet among them, exactly as it falls back in the app today.
+   Italics are synthesised rather than shipped, again matching the app. */
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(/fonts/fraunces-latin-opsz-normal.woff2) format("woff2-variations");
+}
+@font-face {
+  font-family: "Public Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(/fonts/public-sans-latin-wght-normal.woff2) format("woff2-variations");
+}
+
 :root {
   --ink: #26323e;
-  --ink-soft: #6b7683;
+  /* #6b7683 was 4.20:1 on --paper, under WCAG AA for normal text; this
+     clears it at 4.52:1 and is all but indistinguishable. Kept in step with
+     app/src/index.css. */
+  --ink-soft: #66717d;
   --paper: #f5f4ef;
   --surface: #ffffff;
   --line: #dcdad1;
@@ -337,6 +365,50 @@ h3 {
 .install span {
   font-size: 13px;
   color: var(--ink-soft);
+}
+
+/* ---------- prose pages (privacy) ---------- */
+
+.prose {
+  max-width: 68ch;
+  margin-inline: auto;
+  padding: 20px var(--pad) 80px;
+}
+.prose h1 {
+  font-size: clamp(28px, 4vw, 36px);
+  margin-bottom: 14px;
+}
+.prose h2 {
+  font-size: 20px;
+  margin: 38px 0 12px;
+}
+.prose p,
+.prose li {
+  font-size: 15.5px;
+  margin: 0 0 14px;
+}
+.prose ul {
+  padding-left: 20px;
+}
+.prose .sub {
+  max-width: none;
+}
+/* Unresolved sections are marked rather than guessed at, so an unfinished
+   policy cannot be mistaken for a finished one. */
+.todo {
+  display: block;
+  font-style: normal;
+  background: var(--hilite);
+  color: var(--on-hilite);
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+.prose .meta {
+  color: var(--ink-soft);
+  font-size: 13px;
+  margin-top: 40px;
 }
 
 /* ---------- 404 ---------- */

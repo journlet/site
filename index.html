@@ -4,10 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- No third-party scripts, matching the app's posture (spec §6.2). -->
+    <!-- Everything is same-origin: no scripts, no third-party anything.
+         Fonts are self-hosted, so the Google domains are gone from here too. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; object-src 'none'; form-action 'none'"
+      content="default-src 'self'; script-src 'none'; style-src 'self'; font-src 'self'; img-src 'self' data:; base-uri 'none'; object-src 'none'; form-action 'none'"
     />
 
     <title>Journlet — the paper bullet journal, made digital</title>
@@ -42,11 +43,19 @@
     />
     <meta name="twitter:image" content="https://www.journlet.com/og-image.png" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="/fonts/public-sans-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/fraunces-latin-opsz-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
     <link rel="stylesheet" href="/styles.css" />
 
@@ -71,7 +80,7 @@
       <span class="brand">Journlet</span>
       <nav aria-label="Primary">
         <a href="#notation">The notation</a>
-        <a href="#privacy">Privacy</a>
+        <a href="/privacy">Privacy</a>
         <a href="https://app.journlet.com/">Open Journlet</a>
       </nav>
     </header>
@@ -158,12 +167,12 @@
             convenience layered on top, not the thing holding your entries together.
           </p>
         </div>
-        <div id="privacy">
+        <div>
           <h3>Unreadable to us</h3>
           <p>
             Entries are encrypted on your device before they are sent anywhere. The server holds
             nothing but ciphertext. That is a property of the architecture, not a promise in a
-            policy.
+            policy. <a href="/privacy">What is stored, exactly</a>.
           </p>
         </div>
       </section>
