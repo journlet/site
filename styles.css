@@ -69,8 +69,7 @@ a {
 .nav,
 .hero,
 .pillars,
-.wrap,
-footer {
+.wrap {
   max-width: 1080px;
   margin-inline: auto;
   padding-inline: var(--pad);
@@ -301,22 +300,9 @@ h3 {
   color: var(--ink-soft);
 }
 
-/* ---------- footer ---------- */
-
-footer {
-  border-top: 1px solid var(--line);
-  padding-block: 22px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-  font-size: 12.5px;
-  color: var(--ink-soft);
-}
-.foot-links {
-  display: flex;
-  gap: 18px;
-}
+/* No footer: the install band is the last thing on the page, so it ends on
+   something to do. A footer comes back when there is a privacy policy and a
+   contact address to put in it. */
 
 /* ---------- narrow ---------- */
 
