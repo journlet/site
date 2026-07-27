@@ -33,8 +33,15 @@ to GitHub Pages via `.github/workflows/deploy.yaml`.
   here too, or the two surfaces start to drift apart.
 - The sample spread in the hero is real markup, not a screenshot. It cannot go stale, it scales
   cleanly, and search engines read the notation as text.
-- The notation grid is both the product argument and the main SEO surface. The eighth cell
-  ("no emoji, no checkboxes, no substitutes") is the only competitive positioning on the page.
+- **The spread and the notation grid are claims about the app, so they must match it.** The
+  bullet column only ever holds a type glyph (`•` `○` `—`) or a state glyph (`×` `>` `<`).
+  Priority is a highlighted `*` signifier inline before the text, never a bullet. Complete
+  softens the ink; the line-through means "no longer relevant" and is a different state. Migrated
+  and scheduled are muted italic. The source of truth is `app/src/lib/types.ts` and the `.prio`,
+  `.etext.isDone`, `.isStruck` and `.isMigrated` rules in `app/src/index.css`.
+- Nothing on this page may depict a feature the app does not have. An early draft highlighted a
+  word in a sample entry, which the app cannot do. On a page whose entire argument is fidelity to
+  the method, an invented feature is the most expensive kind of mistake.
 - No third-party scripts, and a CSP with `script-src 'none'`, matching the app's posture in
   spec §6.2. There is no analytics on this page by design; if that changes, it should be a
   deliberate decision rather than a default.

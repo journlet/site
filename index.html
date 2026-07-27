@@ -92,33 +92,53 @@
         </div>
 
         <!-- A real spread rather than a screenshot: stays true as the app changes,
-             and search engines read the notation as text. -->
-        <div class="paper" role="img" aria-label="A sample Journlet daily spread showing a priority task, a completed task struck through, an event, a note, a migrated task and an open task.">
+             and search engines read the notation as text. Every state here mirrors
+             the app exactly (app/src/lib/types.ts and app/src/index.css):
+             the bullet column only ever holds a type or state glyph, priority is
+             a highlighted * signifier inline before the text, complete is × with
+             softened ink, migrated is > in muted italic, and the line-through is
+             reserved for "no longer relevant". -->
+        <div class="paper" role="img" aria-label="A sample Journlet daily spread: a priority task, a completed task, an event, a note, a migrated task, an open task and a task struck out as no longer relevant.">
           <p class="paper-title">Monday 27 July</p>
           <hr class="paper-rule" />
-          <p class="row"><span class="glyph">*</span><span>Draft the landing page copy</span></p>
-          <p class="row"><span class="glyph">&times;</span><span class="done">Ring the dentist back</span></p>
+          <p class="row"><span class="glyph">&bull;</span><span><span class="prio"><i>*</i></span>Draft the landing page copy</span></p>
+          <p class="row"><span class="glyph">&times;</span><span class="is-done">Ring the dentist back</span></p>
           <p class="row"><span class="glyph">&#9675;</span><span>Standup, 09:30</span></p>
           <p class="row"><span class="glyph">&mdash;</span><span>Cheaper to fix it now than explain it later</span></p>
-          <p class="row"><span class="glyph">&gt;</span><span>Book the van</span></p>
-          <p class="row"><span class="glyph">&bull;</span><span>Pick up <mark>Ellie</mark> at six</span></p>
+          <p class="row"><span class="glyph">&gt;</span><span class="is-moved">Book the van</span></p>
+          <p class="row"><span class="glyph">&bull;</span><span>Pick up Ellie at six</span></p>
+          <p class="row"><span class="glyph">&bull;</span><span class="is-struck">Chase the Fenwick invoice</span></p>
         </div>
       </section>
 
       <section class="band" id="notation">
        <div class="wrap">
         <p class="eyebrow">The notation</p>
-        <h2>Six marks. Not one of them reinvented.</h2>
+        <h2>Every mark is Carroll's. None of them are ours.</h2>
+
+        <h3 class="ngroup">Types</h3>
         <ul class="notation">
           <li><span class="nglyph">&bull;</span><span class="nlabel">Task<span class="ndesc">Something to do</span></span></li>
           <li><span class="nglyph">&#9675;</span><span class="nlabel">Event<span class="ndesc">Something that happens</span></span></li>
           <li><span class="nglyph">&mdash;</span><span class="nlabel">Note<span class="ndesc">Something worth keeping</span></span></li>
-          <li><span class="nglyph">&times;</span><span class="nlabel">Complete<span class="ndesc">Struck through, not hidden</span></span></li>
+        </ul>
+
+        <h3 class="ngroup">States</h3>
+        <ul class="notation">
+          <li><span class="nglyph">&times;</span><span class="nlabel">Complete<span class="ndesc">Done, and still on the page</span></span></li>
           <li><span class="nglyph">&gt;</span><span class="nlabel">Migrated<span class="ndesc">Moved forward on purpose</span></span></li>
           <li><span class="nglyph">&lt;</span><span class="nlabel">Scheduled<span class="ndesc">Sent to the future log</span></span></li>
-          <li><span class="nglyph">*</span><span class="nlabel">Priority<span class="ndesc">The one that matters</span></span></li>
-          <li class="muted"><span class="nglyph">&#8213;</span><span class="nlabel">No emoji<span class="ndesc">No checkboxes, no substitutes</span></span></li>
+          <li><span class="nglyph"><s>&bull;</s></span><span class="nlabel">Irrelevant<span class="ndesc">Struck through, never deleted</span></span></li>
         </ul>
+
+        <h3 class="ngroup">Signifiers</h3>
+        <ul class="notation">
+          <li><span class="nglyph"><span class="prio"><i>*</i></span></span><span class="nlabel">Priority<span class="ndesc">The one that matters</span></span></li>
+          <li><span class="nglyph"><b>!</b></span><span class="nlabel">Inspiration<span class="ndesc">Worth coming back to</span></span></li>
+        </ul>
+
+        <p class="nfoot">No emoji, no checkboxes, no substitutes. Where a mark needs to stand out
+          it earns it through weight and contrast.</p>
        </div>
       </section>
 
