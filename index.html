@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- No third-party scripts, matching the app's posture (spec §6.2). -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; object-src 'none'; form-action 'none'"
+    />
+
+    <title>Journlet — the paper bullet journal, made digital</title>
+    <meta
+      name="description"
+      content="A digital bullet journal that keeps Ryder Carroll's notation exactly as written. Works offline, needs no account to start, and is end-to-end encrypted so nobody but you can read it."
+    />
+    <link rel="canonical" href="https://journlet.com/" />
+    <meta name="theme-color" content="#f5f4ef" />
+    <meta name="referrer" content="no-referrer" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Journlet" />
+    <meta property="og:url" content="https://journlet.com/" />
+    <meta property="og:title" content="Journlet — the paper bullet journal, made digital" />
+    <meta
+      property="og:description"
+      content="Ryder Carroll's method, notation intact. Works offline, needs no account to start, end-to-end encrypted."
+    />
+    <meta property="og:image" content="https://journlet.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Journlet — the paper bullet journal, made digital." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Journlet — the paper bullet journal, made digital" />
+    <meta
+      name="twitter:description"
+      content="Ryder Carroll's method, notation intact. Works offline, needs no account to start, end-to-end encrypted."
+    />
+    <meta name="twitter:image" content="https://journlet.com/og-image.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Journlet",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Any (progressive web app)",
+        "url": "https://app.journlet.com/",
+        "description": "A digital bullet journal that keeps Ryder Carroll's notation exactly as written. Offline-first and end-to-end encrypted.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" }
+      }
+    </script>
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="nav">
+      <span class="brand">Journlet</span>
+      <nav aria-label="Primary">
+        <a href="#notation">The notation</a>
+        <a href="#privacy">Privacy</a>
+        <a href="https://app.journlet.com/">Open Journlet</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div>
+          <h1>The paper bullet journal, made digital.</h1>
+          <p class="sub">
+            Ryder Carroll's method, notation intact. Works with no signal, no account and no app
+            store. Encrypted so thoroughly that nobody but you can read a word of it.
+          </p>
+          <p class="cta">
+            <a class="btn" href="https://app.journlet.com/">Open Journlet</a>
+            <a class="btn btn-quiet" href="#notation">See the notation</a>
+          </p>
+          <p class="reassure">Free. Nothing to install. Try it before you make an account.</p>
+        </div>
+
+        <!-- A real spread rather than a screenshot: stays true as the app changes,
+             and search engines read the notation as text. -->
+        <div class="paper" role="img" aria-label="A sample Journlet daily spread showing a priority task, a completed task struck through, an event, a note, a migrated task and an open task.">
+          <p class="paper-title">Monday 27 July</p>
+          <hr class="paper-rule" />
+          <p class="row"><span class="glyph">*</span><span>Draft the landing page copy</span></p>
+          <p class="row"><span class="glyph">&times;</span><span class="done">Ring the dentist back</span></p>
+          <p class="row"><span class="glyph">&#9675;</span><span>Standup, 09:30</span></p>
+          <p class="row"><span class="glyph">&mdash;</span><span>Cheaper to fix it now than explain it later</span></p>
+          <p class="row"><span class="glyph">&gt;</span><span>Book the van</span></p>
+          <p class="row"><span class="glyph">&bull;</span><span>Pick up <mark>Ellie</mark> at six</span></p>
+        </div>
+      </section>
+
+      <section class="band" id="notation">
+       <div class="wrap">
+        <p class="eyebrow">The notation</p>
+        <h2>Six marks. Not one of them reinvented.</h2>
+        <ul class="notation">
+          <li><span class="nglyph">&bull;</span><span class="nlabel">Task<span class="ndesc">Something to do</span></span></li>
+          <li><span class="nglyph">&#9675;</span><span class="nlabel">Event<span class="ndesc">Something that happens</span></span></li>
+          <li><span class="nglyph">&mdash;</span><span class="nlabel">Note<span class="ndesc">Something worth keeping</span></span></li>
+          <li><span class="nglyph">&times;</span><span class="nlabel">Complete<span class="ndesc">Struck through, not hidden</span></span></li>
+          <li><span class="nglyph">&gt;</span><span class="nlabel">Migrated<span class="ndesc">Moved forward on purpose</span></span></li>
+          <li><span class="nglyph">&lt;</span><span class="nlabel">Scheduled<span class="ndesc">Sent to the future log</span></span></li>
+          <li><span class="nglyph">*</span><span class="nlabel">Priority<span class="ndesc">The one that matters</span></span></li>
+          <li class="muted"><span class="nglyph">&#8213;</span><span class="nlabel">No emoji<span class="ndesc">No checkboxes, no substitutes</span></span></li>
+        </ul>
+       </div>
+      </section>
+
+      <section class="pillars">
+        <div>
+          <h3>Faithful to the method</h3>
+          <p>
+            Most digital bullet journals quietly swap Carroll's glyphs for checkboxes and coloured
+            icons. Journlet keeps them. Where something needs to stand out it earns it through
+            weight and contrast, never by changing what a mark means.
+          </p>
+        </div>
+        <div>
+          <h3>Yours before it is ours</h3>
+          <p>
+            The journal lives on your device and works with no connection at all. Sync is a
+            convenience layered on top, not the thing holding your entries together.
+          </p>
+        </div>
+        <div id="privacy">
+          <h3>Unreadable to us</h3>
+          <p>
+            Entries are encrypted on your device before they are sent anywhere. The server holds
+            nothing but ciphertext. That is a property of the architecture, not a promise in a
+            policy.
+          </p>
+        </div>
+      </section>
+
+      <section class="install">
+       <div class="wrap">
+        <div><strong>iPhone and iPad</strong><span>Open in Safari, tap Share, then Add to Home Screen.</span></div>
+        <div><strong>Android</strong><span>Open in Chrome and tap Install when prompted.</span></div>
+        <div><strong>Mac and Windows</strong><span>Install from the icon in your browser's address bar.</span></div>
+       </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>An independent project, built in the open.</span>
+      <span class="foot-links">
+        <a href="https://github.com/journlet/app">Source</a>
+        <a href="https://app.journlet.com/">Open Journlet</a>
+      </span>
+    </footer>
+  </body>
+</html>
