@@ -41,7 +41,7 @@
       <h2>The short version</h2>
       <ul>
         <li>Your journal is encrypted on your device before it is sent anywhere.</li>
-        <li>The server stores that ciphertext, your email address, and the small amount of bookkeeping listed below. No journal content.</li>
+        <li>The server stores that ciphertext, your email address, and the small amount of bookkeeping listed below. No readable journal content.</li>
         <li>Your journal key never leaves your devices, so the operator cannot decrypt a journal even if compelled to try.</li>
         <li>There is no analytics, no tracking and no advertising, on this site or in the app.</li>
         <li>You can use the app fully offline without ever creating an account.</li>
@@ -52,15 +52,21 @@
       <p>
         On your device: the whole journal, held in the browser's own database for this site and
         readable only by the app. This is the primary copy. If you never sign in, it is the only
-        copy, and no data of yours exists anywhere else.
+        copy, and none of your writing exists anywhere else.
+      </p>
+      <p>
+        Also on your device, in ordinary browser storage: your theme choice, which page you were
+        last on, and similar small preferences. If you link a device by scanning its QR code, your
+        journal key is briefly held there too while you sign in, and is discarded within thirty
+        minutes whether the linking finishes or not.
       </p>
       <p>
         On the server, only if you enable sync: your email address, and a sequence of encrypted
         updates representing your journal. Alongside those the server keeps the bookkeeping it
-        needs to hand your own rows back to you — an account identifier, the time each update
-        arrived, a label saying which notebook it belongs to, and one encrypted copy of your
-        journal's data key. Supabase separately records the usual authentication details, such as
-        when you last signed in.
+        needs to hand your own rows back to you — an account identifier, when the account first
+        synced, the time each update arrived, a label saying which notebook it belongs to, and one
+        encrypted copy of your journal's data key. Supabase separately records authentication
+        activity, which can include the IP address and browser used to sign in.
       </p>
       <p>
         The updates are encrypted with AES-GCM using a data key generated on your device. That
@@ -72,11 +78,12 @@
         wrapped data key is on the server, and this page would be wrong to claim otherwise.
       </p>
       <p>
-        Sync is provided by Supabase, acting as authentication and encrypted storage only. The
-        server performs no processing of journal content, because it cannot. The one piece of
-        logic that does run there is a database routine that deletes your own account when you
-        ask it to, described below; it reads nothing and returns nothing. Where all of this
-        physically sits is covered under "Where your data goes".
+        Sync is provided by Supabase, acting as authentication and encrypted storage only. No
+        application code of Journlet's runs there, and nothing that runs there is capable of
+        reading journal content. What does run is database rules that check each request is asking
+        for its own rows, and one routine that deletes your account when you ask it to. Where all
+        of this physically sits is covered under
+        <a href="#where">Where your data goes</a>.
       </p>
 
       <h2>What the operator can see</h2>
@@ -128,8 +135,10 @@
         fixed by serving them from Journlet too; this paragraph will go when it is.
       </p>
       <p>
-        Apart from that, the app talks to exactly one other place: the Supabase project that
-        stores your ciphertext, and only once you have signed in.
+        Apart from Google Fonts, the app talks to one other place: the Supabase project that
+        holds your ciphertext. Asking for a sign-in link sends your email address there before you
+        have an account, which is unavoidable — it is how the link reaches you. Until you do that,
+        nothing you write leaves the device.
       </p>
 
       <h2>Your data, and getting rid of it</h2>
@@ -147,8 +156,10 @@
         Deletion, on the server: the app's Sync screen has a "Delete account and all synced data"
         action. It removes your account, every encrypted update stored against it, the stored copy
         of your data key and your email address. You confirm by typing your own email address,
-        because it cannot be undone and there is no grace period or backup to restore from. If you
-        would rather ask than do it yourself, email
+        because it cannot be undone: there is no grace period, and no backup is kept from which
+        the operator could restore it for you. Supabase's own authentication logs are the one
+        thing not removed by that action; ask and they will be cleared too. If you would rather
+        not do any of it yourself, email
         <a href="mailto:privacy@journlet.com">privacy@journlet.com</a> and it will be done for you.
       </p>
       <p>
@@ -175,13 +186,17 @@
       <p>
         Under UK GDPR, processing your email address and storing your encrypted journal is done to
         perform the service you asked for: the lawful basis is performance of a contract, Article
-        6(1)(b). There is no processing here that relies on consent or on legitimate interests,
-        which is a consequence of there being no analytics, no marketing and no profiling to
-        justify. If you never sign in, no processing happens at all, because no data of yours ever
-        leaves your device.
+        6(1)(b). No processing here relies on consent or on legitimate interests, which is a
+        consequence of there being no analytics, no marketing and no profiling to justify.
+      </p>
+      <p>
+        If you never sign in, none of your writing is processed by anyone: it stays on your
+        device. Serving you the site and the app still involves your IP address reaching GitHub
+        Pages, and at present Google Fonts, as described above — that much is true of visiting any
+        website and happens whether or not you have an account.
       </p>
 
-      <h2>Where your data goes</h2>
+      <h2 id="where">Where your data goes</h2>
       <p>
         Your ciphertext and email address are held in Supabase's London region, on servers in the
         United Kingdom. Supabase Inc is a United States company, so administrative access to the
@@ -189,18 +204,22 @@
         standard contractual clauses in Supabase's data processing agreement.
       </p>
       <p>
-        Two other processors are involved. GitHub Pages, operated by Microsoft, serves this website
-        and the app, and processes visitors' IP addresses in the United States in the course of
-        doing so. Sign-in emails are delivered through Supabase's email provider, which handles
-        your email address and the magic link in order to deliver the message.
+        Three other processors are involved. GitHub Pages, operated by Microsoft, serves this
+        website and the app, and processes visitors' IP addresses in the United States in the
+        course of doing so. Google serves the app's two typefaces and therefore receives visitors'
+        IP addresses, also in the United States — the outstanding item described above, and the
+        one entry on this list that should not be here. Sign-in emails are delivered through
+        Supabase's email provider, which handles your email address and the link in order to
+        deliver the message.
       </p>
 
       <h2>Your rights</h2>
       <p>
         Under UK data protection law you have the right to be informed, to access your personal
-        data, to have it corrected, to have it erased, to receive a copy in a portable form, to
-        restrict or object to how it is processed, and to withdraw any consent you have given.
-        You also have the right to complain to the Information Commissioner's Office.
+        data, to have it corrected, to have it erased, to receive a copy in a portable form, and
+        to restrict or object to how it is processed. You also have the right to complain to the
+        Information Commissioner's Office. The right to withdraw consent does not arise here,
+        because none of this processing rests on consent in the first place.
       </p>
       <p>
         In Journlet's case the personal data held is limited to your email address and the
