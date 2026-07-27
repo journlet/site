@@ -3,8 +3,9 @@ STATUS: DRAFT - UNREVIEWED
 
 # journlet/site
 
-The landing page at [journlet.com](https://journlet.com). The app itself lives in
-[journlet/app](https://github.com/journlet/app) and is served from `app.journlet.com`.
+The landing page at [www.journlet.com](https://www.journlet.com). The bare apex `journlet.com`
+redirects here. The app itself lives in [journlet/app](https://github.com/journlet/app) and is
+served from `app.journlet.com`.
 
 Two separate jobs: this repo holds the argument for using Journlet, that repo holds the thing
 itself. Keeping them apart means the marketing page can change hourly without touching the app's
@@ -15,7 +16,7 @@ build, and the app's service worker never has to reason about a non-app route.
 ```
 index.html      the whole page
 styles.css      tokens lifted from the app so both read as one product
-CNAME           journlet.com
+CNAME           www.journlet.com
 robots.txt      + sitemap.xml, for the search-listing route to discovery
 favicon.svg     copied from app/public
 apple-touch-icon.png
@@ -40,17 +41,26 @@ to GitHub Pages via `.github/workflows/deploy.yaml`.
 
 ## One-time setup
 
+`www.journlet.com` is canonical; `journlet.com` redirects to it. GitHub Pages performs that
+redirect itself, but only if the apex also points at Pages, so the apex A records below are
+required even though nothing is served from the apex directly.
+
 1. Settings → Pages → Source: **GitHub Actions**.
-2. DNS at the registrar: four A records for the apex `journlet.com` pointing at
-   `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`. Leave the
-   existing `app` CNAME record pointing at `journlet.github.io` alone.
-3. Settings → Pages → Custom domain: enter `journlet.com`. The `CNAME` file in this repo keeps
-   it set across deploys.
+2. DNS at the registrar:
+   - `CNAME` record, host `www`, value `journlet.github.io.`
+   - four `A` records, host `@`, values `185.199.108.153`, `185.199.109.153`,
+     `185.199.110.153` and `185.199.111.153`
+   - leave the existing `app` CNAME and the email TXT records alone
+3. Settings → Pages → Custom domain: enter `www.journlet.com`. The `CNAME` file in this repo
+   keeps it set across deploys.
 4. Tick **Enforce HTTPS** once GitHub has issued the certificate. This can take up to an hour
    after the DNS records propagate.
 
-The apex and the subdomain are separate custom domains as far as GitHub Pages is concerned, so
-both repos can hold their own `CNAME` without conflicting.
+Each hostname is a separate custom domain as far as GitHub Pages is concerned, so this repo and
+`journlet/app` can hold their own `CNAME` files without conflicting.
+
+Everything user-facing points at `www`: the canonical link, the Open Graph URLs, the sitemap and
+the robots directive. If the canonical host ever changes, those five places change with it.
 
 ## Local preview
 
