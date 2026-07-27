@@ -41,31 +41,42 @@
       <h2>The short version</h2>
       <ul>
         <li>Your journal is encrypted on your device before it is sent anywhere.</li>
-        <li>The server stores that ciphertext and your email address. Nothing else.</li>
-        <li>The encryption key never leaves your devices, so the operator cannot decrypt a journal even if compelled to try.</li>
+        <li>The server stores that ciphertext, your email address, and the small amount of bookkeeping listed below. No journal content.</li>
+        <li>Your journal key never leaves your devices, so the operator cannot decrypt a journal even if compelled to try.</li>
         <li>There is no analytics, no tracking and no advertising, on this site or in the app.</li>
         <li>You can use the app fully offline without ever creating an account.</li>
+        <li>You can delete your account and everything the server holds, from inside the app.</li>
       </ul>
 
       <h2>What is stored, and where</h2>
       <p>
-        On your device: the whole journal, held in your browser's local storage and readable only
-        by the app. This is the primary copy. If you never sign in, it is the only copy, and no
-        data of yours exists anywhere else.
+        On your device: the whole journal, held in the browser's own database for this site and
+        readable only by the app. This is the primary copy. If you never sign in, it is the only
+        copy, and no data of yours exists anywhere else.
       </p>
       <p>
         On the server, only if you enable sync: your email address, and a sequence of encrypted
-        updates representing your journal. The updates are encrypted with AES-GCM using a key
-        generated on your device and wrapped by a second key that is only ever shown to you as
-        your journal key. Neither key is transmitted to the server, so the stored updates are
-        unreadable to the operator, to the hosting provider, and to anyone who obtains a copy of
-        the database.
+        updates representing your journal. Alongside those the server keeps the bookkeeping it
+        needs to hand your own rows back to you — an account identifier, the time each update
+        arrived, a label saying which notebook it belongs to, and one encrypted copy of your
+        journal's data key. Supabase separately records the usual authentication details, such as
+        when you last signed in.
       </p>
       <p>
-        Sync is provided by Supabase, acting as authentication and encrypted storage only. No
-        application code runs on the server, and the server performs no processing of journal
-        content, because it cannot. The project is hosted in Supabase's London region, so the
-        ciphertext and your email address sit on servers in the United Kingdom.
+        The updates are encrypted with AES-GCM using a data key generated on your device. That
+        data key is itself encrypted with a second key, shown to you as your journal key, and the
+        encrypted result is what the server stores. To be precise about the distinction, because
+        it is the one that matters: your journal key never leaves your devices, and without it the
+        stored copy of the data key is unreadable. So the updates are unreadable to the operator,
+        to the hosting provider, and to anyone who obtains a copy of the database — but the
+        wrapped data key is on the server, and this page would be wrong to claim otherwise.
+      </p>
+      <p>
+        Sync is provided by Supabase, acting as authentication and encrypted storage only. The
+        server performs no processing of journal content, because it cannot. The one piece of
+        logic that does run there is a database routine that deletes your own account when you
+        ask it to, described below; it reads nothing and returns nothing. Where all of this
+        physically sits is covered under "Where your data goes".
       </p>
 
       <h2>What the operator can see</h2>
@@ -108,22 +119,50 @@
         analyse that data.
       </p>
 
+      <h2>The app, and one outstanding third party</h2>
+      <p>
+        The app itself carries no analytics and no tracking either. It does, at present, load two
+        typefaces from Google Fonts, which means opening the app discloses your IP address and
+        browser to Google. That is inconsistent with everything else on this page and with the
+        rest of the site, where the same fonts are already served from this domain. It is being
+        fixed by serving them from Journlet too; this paragraph will go when it is.
+      </p>
+      <p>
+        Apart from that, the app talks to exactly one other place: the Supabase project that
+        stores your ciphertext, and only once you have signed in.
+      </p>
+
       <h2>Your data, and getting rid of it</h2>
       <p>
         Export: the app exports your entire journal as Markdown, generated on your device. There
         is no lock-in and no need to ask anyone for a copy.
       </p>
       <p>
-        Deletion, on your device: signing out wipes the local journal and the keys from that
-        device immediately.
+        Deletion, on your device: choosing to sign out wipes the local journal and the keys from
+        that device immediately. A session simply expiring does not — the journal stays on the
+        device and the app tells you it has stopped syncing, because losing your writing to a
+        timeout would be indefensible.
       </p>
       <p>
-        Deletion, on the server: there is currently no way to delete an account from inside the
-        app. This is a gap rather than a policy, and it is being fixed. Until it is, email
-        <a href="mailto:privacy@journlet.com">privacy@journlet.com</a> and the account, its
-        encrypted journal data and the email address attached to it will be removed. Given the
-        encryption, what is deleted is ciphertext nobody could read in the first place, but it is
-        your data and you are entitled to have it gone.
+        Deletion, on the server: the app's Sync screen has a "Delete account and all synced data"
+        action. It removes your account, every encrypted update stored against it, the stored copy
+        of your data key and your email address. You confirm by typing your own email address,
+        because it cannot be undone and there is no grace period or backup to restore from. If you
+        would rather ask than do it yourself, email
+        <a href="mailto:privacy@journlet.com">privacy@journlet.com</a> and it will be done for you.
+      </p>
+      <p>
+        Deleting the account does not reach devices that are still signed in elsewhere: each holds
+        its own copy of the journal until you sign out or remove the app there. Nothing can erase a
+        device remotely, and no honest design could claim otherwise.
+      </p>
+      <p>
+        Retention: nothing is deleted automatically. If you stop using Journlet, your encrypted
+        updates and your email address stay on the server until you delete the account. This is a
+        deliberate choice — a journal is the sort of thing people return to after long gaps, and
+        silently destroying it after a period of inactivity would be worse than keeping ciphertext
+        nobody can read. Supabase pauses unused free projects after a period of inactivity, which
+        suspends access but is not deletion and should not be mistaken for it.
       </p>
       <p>
         Recovery: your journal key is the only way back into an encrypted journal. If you lose
@@ -132,12 +171,43 @@
         point where it matters.
       </p>
 
+      <h2>Why this is lawful</h2>
+      <p>
+        Under UK GDPR, processing your email address and storing your encrypted journal is done to
+        perform the service you asked for: the lawful basis is performance of a contract, Article
+        6(1)(b). There is no processing here that relies on consent or on legitimate interests,
+        which is a consequence of there being no analytics, no marketing and no profiling to
+        justify. If you never sign in, no processing happens at all, because no data of yours ever
+        leaves your device.
+      </p>
+
+      <h2>Where your data goes</h2>
+      <p>
+        Your ciphertext and email address are held in Supabase's London region, on servers in the
+        United Kingdom. Supabase Inc is a United States company, so administrative access to the
+        service it operates may involve transfers outside the UK; such transfers rely on the
+        standard contractual clauses in Supabase's data processing agreement.
+      </p>
+      <p>
+        Two other processors are involved. GitHub Pages, operated by Microsoft, serves this website
+        and the app, and processes visitors' IP addresses in the United States in the course of
+        doing so. Sign-in emails are delivered through Supabase's email provider, which handles
+        your email address and the magic link in order to deliver the message.
+      </p>
+
       <h2>Your rights</h2>
       <p>
-        Under UK data protection law you have the right to access, correct, export and erase your
-        personal data, and to complain to the Information Commissioner's Office. In Journlet's
-        case the personal data held is limited to your email address, since the journal content
-        is not readable by the operator. Requests go to
+        Under UK data protection law you have the right to be informed, to access your personal
+        data, to have it corrected, to have it erased, to receive a copy in a portable form, to
+        restrict or object to how it is processed, and to withdraw any consent you have given.
+        You also have the right to complain to the Information Commissioner's Office.
+      </p>
+      <p>
+        In Journlet's case the personal data held is limited to your email address and the
+        bookkeeping described above, since the journal content is not readable by the operator.
+        Access, portability and erasure are all available to you directly: export from the app's
+        menu, delete from the Sync screen. Anything else, including anything you would rather have
+        done for you, goes to
         <a href="mailto:privacy@journlet.com">privacy@journlet.com</a>.
       </p>
 
