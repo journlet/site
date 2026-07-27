@@ -46,33 +46,26 @@ to GitHub Pages via `.github/workflows/deploy.yaml`.
   spec §6.2. There is no analytics on this page by design; if that changes, it should be a
   deliberate decision rather than a default.
 
-## The outstanding gap on /privacy
+## /privacy
 
-`privacy.html` is complete except for the data controller's name and postal address, which is
-highlighted in the page itself so an unfinished notice cannot pass for a finished one.
+Complete as of 27 July 2026: controller named, postal address given, contact via a
+`privacy@journlet.com` alias rather than a personal mailbox.
 
-UK GDPR Article 13 requires a privacy notice to identify the controller and give contact details.
-A `privacy@journlet.com` alias covers the contact requirement without publishing a personal
-address, and is what the page uses. The identity requirement is harder to avoid. The realistic
-options, in rough order of how well they keep a home address off the internet:
+Two things to revisit rather than forget:
 
-1. **A limited company.** The controller becomes the company and the registered office is the
-   address. That address is already public at Companies House, and can be a formation agent's
-   service address rather than home. Costs about £50 a year and also caps personal liability.
-2. **A service or virtual address as a sole trader.** Cheaper, a few pounds a month, and keeps
-   the home address private, but the controller is still you by name.
-3. **Name and home address.** Free, and what many small projects do. Publishing a home address on
-   a site aimed at strangers is a real trade-off.
+- **The postal address is a home address.** It is on a public page aimed at strangers, which was
+  a deliberate trade-off taken to get the page finished. The alternatives, if it ever grates: a
+  limited company, where the controller becomes the company and the registered office can be a
+  formation agent's service address (about £50 a year, and it caps personal liability); or a
+  service address as a sole trader, a few pounds a month. Either change is a one-paragraph edit
+  here.
+- **The ICO data protection fee**, from £52 a year, generally applies once personal data is being
+  processed. Worth checking against the ICO's own self-assessment before public launch.
 
-Two things worth knowing either way. Sole traders and companies processing personal data usually
-need to pay the ICO's annual data protection fee, which starts at £52. And none of the above bites
-while the only user is the author, since there is no other data subject — the requirement arrives
-with the first real sign-up, which makes this a launch task rather than an urgent one.
-
-None of this is legal advice. It is worth twenty minutes of a solicitor's time before launch.
-
-Account deletion, the other thing the page had to be honest about, is tracked as item 16 in
+Account deletion, the other thing this page had to be honest about, is tracked as item 16 in
 `spec/remediation-2026-07-21.md` and gates public launch.
+
+None of the above is legal advice.
 
 ## One-time setup
 
