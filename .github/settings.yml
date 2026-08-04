@@ -1,0 +1,95 @@
+# Repository settings, applied by the Settings app (repository-settings/app)
+# whenever this file changes on the default branch.
+#
+# Same two caveats as journlet/app's copy. The app holds admin rights and takes its
+# instructions from the repository, so anyone who can merge can change these rules
+# including switching them off; and a change here only takes effect once merged, so
+# the rules cannot gate a change to themselves.
+#
+# A rejected ruleset is the failure mode that looks like success, so after merging
+# this, check Settings -> Rules and confirm both appear and are Active.
+
+repository:
+  name: site
+  description: The landing page and privacy notice for Journlet, at www.journlet.com. Plain static files, no build step, no JavaScript.
+  homepage: https://www.journlet.com
+  topics: journlet, landing-page, static-site, github-pages
+
+  has_issues: true
+  has_projects: false
+  has_wiki: false
+  has_downloads: false
+
+  default_branch: main
+
+  allow_squash_merge: true
+  allow_merge_commit: false
+  allow_rebase_merge: false
+  delete_branch_on_merge: true
+
+  # No dependencies here at all, so these have nothing to find. On anyway, because
+  # that is the right default and an unused alert channel costs nothing, whereas
+  # discovering later that it was off costs something.
+  enable_automated_security_fixes: true
+  enable_vulnerability_alerts: true
+
+  # `private` deliberately omitted, as in the app repo. This one is public, and its
+  # README was briefly served to the web because of a different mistake in this
+  # same repository, so visibility stays a deliberate act in the UI.
+
+teams:
+  - name: journlet
+    permission: admin
+
+rulesets:
+  - name: Prevent destruction of the default branch
+    target: branch
+    enforcement: active
+    conditions:
+      ref_name:
+        include:
+          - "~DEFAULT_BRANCH"
+        exclude: []
+    rules:
+      - type: deletion
+      - type: non_fast_forward
+
+  # Note what is absent: no "The build must pass" ruleset, and that is the only
+  # real difference from the app repo.
+  #
+  # This repository has no build, no tests and no lint. Its workflow is a single
+  # deploy job triggered on push to main, and a deploy must never run on a pull
+  # request because it would publish unmerged work to the live site. So nothing
+  # reports a check on a pull request here, and requiring one would block every
+  # merge waiting for something that cannot arrive.
+  #
+  # If this repo earns a check worth gating on, the honest order is: add a
+  # pull_request job that validates the HTML and the internal links, watch it
+  # report, and only then add the ruleset naming it. Both live-site mistakes found
+  # on 4 and 5 August were in this repository, so that is worth doing rather than
+  # dismissing.
+  - name: Changes must be reviewed
+    target: branch
+    enforcement: active
+    # Same reasoning as the app repo: a code owner cannot approve their own pull
+    # request, so without this bypass the sole maintainer could never merge. Dormant
+    # now, binding the moment anyone else commits.
+    bypass_actors:
+      - actor_id: 1
+        actor_type: OrganizationAdmin
+        bypass_mode: always
+    conditions:
+      ref_name:
+        include:
+          - "~DEFAULT_BRANCH"
+        exclude: []
+    rules:
+      - type: pull_request
+        parameters:
+          allowed_merge_methods:
+            - squash
+          dismiss_stale_reviews_on_push: true
+          require_code_owner_review: true
+          require_last_push_approval: true
+          required_approving_review_count: 1
+          required_review_thread_resolution: true
