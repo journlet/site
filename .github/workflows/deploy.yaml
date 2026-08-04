@@ -1,33 +1,54 @@
 name: Deploy to GitHub Pages
 
-# The site is plain static files with no build step, so the repo root is
-# published as-is. Keep it that way: a landing page that needs a toolchain
-# is a landing page that eventually stops deploying.
+# The site is plain static files with no build step, so there is nothing to
+# compile. There is still a staging step, and it is a confidentiality control
+# rather than a build: uploading the repo root published README.md at
+# www.journlet.com/README.md, and that file is INTERNAL — it annotates the
+# postal address on the privacy page as a home address and notes an ICO fee
+# question. upload-pages-artifact excludes .git, .github and dotfiles, but not
+# ordinary files.
+#
+# The rule is: publish every tracked file except Markdown. Chosen because it
+# does not rot in the dangerous direction. A new page is .html and ships
+# automatically; a new internal note is .md and is excluded automatically. If
+# the rule is ever wrong it is wrong by omitting an asset, which shows up as a
+# visible 404 rather than as a silent disclosure.
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+# Scoped per job, not at workflow level. See journlet/app's workflow for the
+# reasoning; here there is no dependency code to contain, so it is consistency.
+permissions: {}
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  # A deployment is not a cancellable build. Two quick pushes cancelling an
+  # in-flight deploy-pages step is worse than queueing behind it.
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
+      - name: Stage the publishable files
+        run: |
+          mkdir _site
+          git ls-files -z | grep -zvE '(\.md$|^\.)' \
+            | xargs -0 -I{} cp --parents {} _site/
+          echo "Publishing:"
+          find _site -type f | sort
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: .
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v5
