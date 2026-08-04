@@ -42,7 +42,7 @@
       <ul>
         <li>Your journal is encrypted on your device before it is sent anywhere.</li>
         <li>The server stores that ciphertext, your email address, and the small amount of bookkeeping listed below. No readable journal content.</li>
-        <li>Your journal key never leaves your devices, so the operator cannot decrypt a journal even if compelled to try.</li>
+        <li>Your journal key never leaves your devices, so the operator cannot decrypt a journal from the data it holds.</li>
         <li>There is no analytics, no tracking and no advertising, on this site or in the app.</li>
         <li>You can use the app fully offline without ever creating an account.</li>
         <li>You can delete your account and everything the server holds, from inside the app.</li>
@@ -57,8 +57,10 @@
       <p>
         Also on your device, in ordinary browser storage: your theme choice, which page you were
         last on, and similar small preferences. If you link a device by scanning its QR code, your
-        journal key is briefly held there too while you sign in, and is discarded within thirty
-        minutes whether the linking finishes or not.
+        journal key is held there while you sign in. Thirty minutes after the scan it stops being
+        accepted, and it is erased the next time the app opens on that device. If you scan the code
+        and then never open the app again, it stays in that storage until you do, so finish the
+        linking or open the app once more if you would rather it were gone.
       </p>
       <p>
         On the server, only if you enable sync: your email address, and a sequence of encrypted
@@ -76,6 +78,15 @@
         stored copy of the data key is unreadable. So the updates are unreadable to the operator,
         to the hosting provider, and to anyone who obtains a copy of the database — but the
         wrapped data key is on the server, and this page would be wrong to claim otherwise.
+      </p>
+      <p>
+        One more distinction in the same spirit, because it is the limit of what any web app can
+        honestly promise. Journlet is delivered to you as a web page, so the encryption described
+        here is performed by code the operator publishes. Nobody can decrypt your journal from the
+        data the server holds. What you are also trusting, every time the app updates, is that the
+        code served to you is the code described on this page. There is no app store review and no
+        signed build standing between the two. That trust is unavoidable for software delivered
+        this way, and it is better stated plainly than left for you to work out.
       </p>
       <p>
         Sync is provided by Supabase, acting as authentication and encrypted storage only. No
@@ -245,7 +256,7 @@
         history is public in the site's source repository.
       </p>
 
-      <p class="meta">Last updated 28 July 2026.</p>
+      <p class="meta">Last updated 4 August 2026.</p>
     </main>
   </body>
 </html>

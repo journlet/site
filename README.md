@@ -13,6 +13,9 @@ build, and the app's service worker never has to reason about a non-app route.
 
 ## What is here
 
+Everything here except Markdown and dotfiles is published. `README.md` is excluded by the
+workflow on purpose, because it used to be served at `www.journlet.com/README.md`.
+
 ```
 index.html      the whole page
 styles.css      tokens lifted from the app so both read as one product
@@ -23,8 +26,8 @@ apple-touch-icon.png
 og-image.png    link preview card
 ```
 
-No build step, no dependencies, no JavaScript at all. A push to `main` publishes the repo root
-to GitHub Pages via `.github/workflows/deploy.yaml`.
+No build step, no dependencies, no JavaScript at all. A push to `main` publishes the tracked
+files, minus Markdown and dotfiles, to GitHub Pages via `.github/workflows/deploy.yaml`.
 
 ## Design notes
 
@@ -62,8 +65,10 @@ Two things to revisit rather than forget:
 - **The ICO data protection fee**, from £52 a year, generally applies once personal data is being
   processed. Worth checking against the ICO's own self-assessment before public launch.
 
-Account deletion, the other thing this page had to be honest about, is tracked as item 16 in
-`spec/remediation-2026-07-21.md` and gates public launch.
+Account deletion, the other thing this page had to be honest about, shipped as item 16 in
+`spec/remediation-2026-07-21.md`. What is still open is 17(a), the launch gate: nothing has yet
+confirmed that the `delete_account()` function's owner may delete from `auth.users` on this
+specific project. The page claims deletion works, so that check is what the claim rests on.
 
 None of the above is legal advice.
 
