@@ -1,0 +1,21 @@
+# Pinning the actions to commit SHAs removes the silent-update problem and
+# creates a silent-staleness one in its place. This is the other half:
+# Dependabot rewrites the pins, and the version comment beside them, in a pull
+# request.
+#
+# No npm entry, deliberately: this repository has no package.json. It is static
+# HTML, CSS and self-hosted fonts, which is also why it has no build step and
+# nothing for a status check to report on.
+#
+# Note the interaction with the rulesets here: review is required and Dependabot
+# cannot approve its own pull request, so each one needs a human look. That is
+# the intended cost of pinning.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: "ci"
