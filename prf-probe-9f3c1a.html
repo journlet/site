@@ -8,9 +8,7 @@
 <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Journlet%20PRF%20probe%22%2C%22short_name%22%3A%22PRF%20probe%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%22%7D" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <style>
-  /* Tokens lifted from site/styles.css and app/src/index.css so this reads as
-     part of the product rather than a stray test page. Fonts are referenced at
-     the site's own paths and fall back to system stacks anywhere else. */
+  /* Tokens lifted from site/styles.css and app/src/index.css. */
   @font-face {
     font-family: "Fraunces"; font-style: normal; font-display: swap; font-weight: 100 900;
     src: url(/fonts/fraunces-latin-opsz-normal.woff2) format("woff2-variations");
@@ -22,13 +20,14 @@
   :root {
     --ink: #26323e; --ink-soft: #66717d; --paper: #f5f4ef; --surface: #ffffff;
     --line: #dcdad1; --hilite: #ffe066; --on-hilite: #26323e;
-    --good: #2f6b46; --bad: #8c2f2f; --warn: #8a6412;
+    --good: #2f6b46; --good-bg: #e6f2ea; --bad: #8c2f2f; --bad-bg: #f7e7e7;
+    --warn: #8a6412; --warn-bg: #faf0d8;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --ink: #e7e4dc; --ink-soft: #9aa4b0; --paper: #191d23; --surface: #232a31;
-      --line: #333b44; --good: #7fc79b; --bad: #e59a9a; --warn: #dfc077;
-      color-scheme: dark;
+      --line: #333b44; --good: #7fc79b; --good-bg: #1e3229; --bad: #e59a9a; --bad-bg: #3a2626;
+      --warn: #dfc077; --warn-bg: #332d1c; color-scheme: dark;
     }
   }
   * { box-sizing: border-box; }
@@ -38,52 +37,55 @@
     font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
   }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 28px 20px 80px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 24px 18px 80px; }
   h1, h2, h3 { font-family: "Fraunces", Georgia, serif; font-weight: 600; line-height: 1.2; margin: 0; }
-  h1 { font-size: 30px; letter-spacing: -0.01em; }
+  h1 { font-size: 29px; letter-spacing: -0.01em; }
   h2 { font-size: 21px; margin: 34px 0 10px; }
   h3 { font-size: 16px; font-family: "Public Sans", system-ui, sans-serif; font-weight: 700; margin: 0 0 6px; }
   p { margin: 9px 0; }
   .lede { color: var(--ink-soft); font-size: 15.5px; }
-  .card {
-    background: var(--surface); border: 1px solid var(--line);
-    border-radius: 12px; padding: 16px 18px; margin: 14px 0;
-  }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin: 14px 0; }
   .rule { height: 1px; background: var(--line); border: 0; margin: 30px 0; }
   button {
-    font: inherit; font-weight: 600; cursor: pointer;
-    background: var(--ink); color: var(--paper);
-    border: 1px solid var(--ink); border-radius: 9px;
-    padding: 10px 16px; margin: 4px 6px 4px 0;
+    font: inherit; font-weight: 600; cursor: pointer; background: var(--ink); color: var(--paper);
+    border: 1px solid var(--ink); border-radius: 9px; padding: 11px 16px; margin: 4px 6px 4px 0;
   }
   button.quiet { background: transparent; color: var(--ink); border-color: var(--line); font-weight: 500; }
-  button:disabled { opacity: 0.45; cursor: not-allowed; }
-  code, .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13.5px; }
+  button.small { padding: 7px 11px; font-size: 13.5px; font-weight: 500; }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+  input[type=text] {
+    font: inherit; padding: 10px 12px; border-radius: 9px; border: 1px solid var(--line);
+    background: var(--paper); color: var(--ink); width: 100%; max-width: 340px;
+  }
+  code, .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; }
   table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
-  td { padding: 7px 4px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  td:first-child { color: var(--ink-soft); width: 46%; }
+  td, th { padding: 7px 4px; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-soft); }
+  #env td:first-child { color: var(--ink-soft); width: 46%; }
   .yes { color: var(--good); font-weight: 700; }
   .no  { color: var(--bad);  font-weight: 700; }
   .huh { color: var(--warn); font-weight: 700; }
   .fp {
-    font-family: ui-monospace, "SF Mono", Menlo, monospace;
-    font-size: 27px; letter-spacing: 0.14em; font-weight: 700;
-    background: var(--hilite); color: var(--on-hilite);
-    display: inline-block; padding: 5px 12px; border-radius: 7px; margin: 8px 0;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 26px;
+    letter-spacing: 0.13em; font-weight: 700; background: var(--hilite); color: var(--on-hilite);
+    display: inline-block; padding: 5px 12px; border-radius: 7px;
   }
+  .verdict { border-radius: 10px; padding: 13px 15px; margin: 12px 0; font-size: 15px; border: 1px solid; }
+  .verdict.good { background: var(--good-bg); border-color: var(--good); }
+  .verdict.bad  { background: var(--bad-bg);  border-color: var(--bad); }
+  .verdict.warn { background: var(--warn-bg); border-color: var(--warn); }
+  .verdict b { display: block; font-size: 16px; margin-bottom: 3px; }
   .log {
     font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px;
     white-space: pre-wrap; word-break: break-word; color: var(--ink-soft);
-    max-height: 240px; overflow: auto; margin-top: 10px;
+    max-height: 200px; overflow: auto; margin-top: 10px;
   }
-  .steps { counter-reset: s; padding: 0; list-style: none; margin: 0; }
-  .steps > li { counter-increment: s; position: relative; padding-left: 34px; margin: 16px 0; }
-  .steps > li::before {
-    content: counter(s); position: absolute; left: 0; top: 1px;
-    width: 23px; height: 23px; border-radius: 50%; background: var(--ink); color: var(--paper);
-    font-size: 12.5px; font-weight: 700; display: grid; place-items: center;
+  .bigstep { display: flex; gap: 12px; align-items: flex-start; margin: 14px 0; }
+  .bigstep .n {
+    flex: 0 0 auto; width: 27px; height: 27px; border-radius: 50%; background: var(--ink);
+    color: var(--paper); font-size: 14px; font-weight: 700; display: grid; place-items: center; margin-top: 2px;
   }
-  /* Mock phone screens for the flow walkthrough. */
+  .bigstep .x { background: var(--bad); }
   .screens { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 14px; }
   .screen {
     background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
@@ -92,13 +94,9 @@
   .screen .cap { font-size: 11px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-soft); font-weight: 700; }
   .screen .t { font-family: "Fraunces", Georgia, serif; font-size: 18px; font-weight: 600; }
   .screen .b { font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
-  .screen .btn {
-    margin-top: auto; background: var(--ink); color: var(--paper);
-    border-radius: 8px; padding: 9px 12px; font-size: 13.5px; font-weight: 600; text-align: center;
-  }
+  .screen .btn { margin-top: auto; background: var(--ink); color: var(--paper); border-radius: 8px; padding: 9px 12px; font-size: 13.5px; font-weight: 600; text-align: center; }
   .screen .btn.alt { background: transparent; color: var(--ink); border: 1px solid var(--line); font-weight: 500; margin-top: 6px; }
-  .tag { display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em;
-         text-transform: uppercase; padding: 2px 7px; border-radius: 5px; border: 1px solid var(--line); color: var(--ink-soft); }
+  .tag { display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 7px; border-radius: 5px; border: 1px solid var(--line); color: var(--ink-soft); }
   .note { border-left: 3px solid var(--hilite); padding-left: 13px; margin: 14px 0; }
   ul.plain { margin: 8px 0; padding-left: 20px; }
   ul.plain li { margin: 5px 0; }
@@ -110,40 +108,58 @@
   <p class="tag">Prototype, not shipped</p>
   <h1>Passkey PRF as the recovery route</h1>
   <p class="lede">
-    Two things in one page. The top half is a live probe that really does create a
-    passkey and derive a secret from it, so you can answer spec §11 Q11 on your own
-    devices. The bottom half is the interaction design that secret would make possible.
+    A live probe that really does create a passkey and derive a secret from it, plus the
+    interaction design that secret would make possible.
   </p>
 
   <hr class="rule" />
 
   <h2>1. What this actually is</h2>
   <p>
-    A passkey normally proves <em>who you are</em>. The PRF extension lets the same
-    passkey also hand back a secret: give the authenticator a fixed salt, and it returns
-    the same 32 bytes every time, on every device where that passkey lives. It never
-    leaves the device unencrypted and the server never sees it.
+    A passkey normally proves <em>who you are</em>. The PRF extension lets the same passkey
+    also hand back a secret: give the authenticator a fixed salt, and it returns the same
+    32 bytes every time, on every device where that passkey lives. It never leaves the
+    device unencrypted and the server never sees it.
   </p>
   <p>
-    That secret can wrap Journlet's keeper key. The consequence is the whole point:
-    the keeper key stops living <em>on a device</em> and starts being something any
-    device can unwrap after a Face ID check. No device has to hold it, so no device
-    is the one that must not be lost.
+    That secret can wrap Journlet's keeper key, so the keeper key stops living
+    <em>on a device</em> and starts being something any device can unwrap after a Face ID
+    check. No device has to hold it, so no device is the one that must not be lost.
   </p>
 
-  <h2>2. Live probe</h2>
+  <h2>2. How to run this properly</h2>
+  <div class="card">
+    <div class="bigstep">
+      <div class="n">1</div>
+      <div><strong>On your first device only, press Create.</strong> This makes one passkey.
+      Note the result code it produces.</div>
+    </div>
+    <div class="bigstep">
+      <div class="n">2</div>
+      <div><strong>On your second device, press Derive. Never Create.</strong> Pressing Create
+      again makes a <em>second, unrelated</em> passkey with its own secret, and the two will
+      never match. That is the one mistake that invalidates the test.</div>
+    </div>
+    <div class="bigstep">
+      <div class="n">3</div>
+      <div><strong>Paste the first device's result code into the compare box.</strong> It will
+      tell you what the answer means, including whether you accidentally compared two
+      different passkeys.</div>
+    </div>
+    <div class="bigstep">
+      <div class="n x">!</div>
+      <div>If you have already made several test passkeys, delete them all first, or use the
+      device label below so the chooser is readable.</div>
+    </div>
+  </div>
+
+  <h2>3. Live probe</h2>
   <p class="lede">
-    This creates a real passkey named "Journlet PRF test". Delete it afterwards in
-    your password manager. It must run on an <strong>https origin</strong>, so the
-    preview pane in a chat window will refuse it.
-  </p>
-  <p class="lede">
-    Served from a journlet.com host, it claims <code>journlet.com</code> as the relying
-    party ID rather than the page's own hostname. That matters here specifically: the
-    site is <code>www.journlet.com</code> and the app is <code>app.journlet.com</code>,
-    so a credential bound to either subdomain would be useless to the other. Claiming
-    the registrable domain makes one passkey work across both, which is what the real
-    design needs and therefore what the test has to exercise.
+    Creates a real passkey. Delete it afterwards in your password manager. Needs an
+    <strong>https origin</strong>, so a chat preview pane will refuse it. Served from a
+    journlet.com host it claims <code>journlet.com</code> as the relying party ID rather
+    than the page's hostname, so one credential covers both
+    <code>www.journlet.com</code> and <code>app.journlet.com</code>.
   </p>
 
   <div class="card">
@@ -152,38 +168,65 @@
   </div>
 
   <div class="card">
-    <h3>Run it</h3>
+    <h3>Name this device</h3>
     <p class="lede" style="margin-top:0">
-      Step 1 makes the passkey. Step 2 derives the secret twice and checks the two
-      match. Step 3 does the real job: wrap a keeper key with it, then unwrap it back.
+      Goes into the passkey's name, so when a chooser appears you can tell which device made
+      which. Set it before pressing Create.
     </p>
-    <button id="bCreate">1. Create the test passkey</button>
-    <button id="bDerive" class="quiet">2. Derive the secret, twice</button>
-    <button id="bWrap" class="quiet">3. Wrap and unwrap a keeper key</button>
+    <input type="text" id="label" />
+  </div>
+
+  <div class="card">
+    <h3>Run it</h3>
+    <button id="bCreate">Create a passkey (first device only)</button>
+    <button id="bDerive" class="quiet">Derive the secret</button>
+    <button id="bWrap" class="quiet">Wrap and unwrap a keeper key</button>
+    <div id="verdicts"></div>
+
     <div id="fpBox" hidden>
-      <p style="margin-bottom:0">Fingerprint of the derived key:</p>
+      <p style="margin-bottom:4px"><strong>Result code for this device</strong></p>
       <div class="fp" id="fp">········</div>
-      <p class="lede" style="margin-top:0">
-        This is the number that answers the question. Run the probe on your Mac and
-        again on your iPhone, signed into the same iCloud account. <strong>Same
-        fingerprint means the whole design works.</strong> Different, or a failure on
-        one of them, means it does not, and the J1 code stays as the primary route.
-      </p>
+      <p class="mono" id="resultCode" style="margin:8px 0 4px"></p>
+      <button class="small quiet" id="bCopy">Copy result code</button>
+      <button class="small quiet" id="bForget">Forget this credential (act as a fresh device)</button>
     </div>
+
     <div class="log" id="log">Ready.</div>
   </div>
 
-  <div class="note">
-    <p style="margin-top:0"><strong>What a pass proves.</strong> That a synced passkey
-    yields a stable, identical secret across your devices. That is the entire load-bearing
-    assumption. Everything below is straightforward once it holds, and worthless if it does not.</p>
+  <div class="card">
+    <h3>Compare with your other device</h3>
+    <p class="lede" style="margin-top:0">
+      Paste the result code from the other device. Comparing the credential id as well as the
+      fingerprint is what stops a wrong answer being read as a right one.
+    </p>
+    <input type="text" id="compareIn" placeholder="FP:XXXXXXXX CRED:xxxxxxxxxxxx" />
+    <div><button class="small" id="bCompare">Compare</button></div>
+    <div id="compareOut"></div>
   </div>
 
-  <h2>3. What it would look like</h2>
+  <div class="card">
+    <h3>Every run on this device</h3>
+    <table id="hist">
+      <thead><tr><th>What</th><th>Credential</th><th>Fingerprint</th></tr></thead>
+      <tbody><tr><td colspan="3" class="lede">Nothing yet.</td></tr></tbody>
+    </table>
+    <p class="lede" style="margin-bottom:0">
+      Two rows with the same credential must have the same fingerprint. If they do not, PRF is
+      not stable and the design fails.
+    </p>
+  </div>
+
+  <div class="note">
+    <p style="margin-top:0"><strong>What a pass proves.</strong> That one synced passkey yields
+    the same secret on two devices. That is the entire load-bearing assumption. Everything below
+    is straightforward once it holds, and worthless if it does not.</p>
+  </div>
+
+  <h2>4. What it would look like</h2>
   <p>
-    The design goal you set was that this should be close to invisible. So the test for
-    each screen below is simple: how much does the person have to understand, and how
-    much do they have to keep?
+    The goal is that this is close to invisible. So the test for each screen is simple: how much
+    does the person have to understand, and how much do they have to keep?
   </p>
 
   <h3 style="margin-top:22px">First run</h3>
@@ -203,9 +246,8 @@
     </div>
   </div>
   <p class="lede">
-    The current build spends this moment on a code the person is told nobody can ever
-    give back. That is the hardest possible ask at the moment they have least invested,
-    which is why most people will tick the box without saving it.
+    The current build spends this moment on a code the person is told nobody can ever give back.
+    That is the hardest possible ask at the moment they have least invested.
   </p>
 
   <h3 style="margin-top:26px">A second device</h3>
@@ -220,14 +262,10 @@
     <div class="screen">
       <div class="cap">Two seconds later</div>
       <div class="t">Unlocked</div>
-      <div class="b">The passkey came with your iCloud account, so the same secret is there and the journal opens.<br><br>No code typed, no other device woken, nothing approved.</div>
+      <div class="b">The passkey came with your account, so the same secret is there and the journal opens.<br><br>No code typed, no other device woken, nothing approved.</div>
       <div class="btn">Go to today</div>
     </div>
   </div>
-  <p class="lede">
-    Today this screen needs either the J1 code typed in or another device awake to approve.
-    Both are things a non-technical person can be stuck behind.
-  </p>
 
   <h3 style="margin-top:26px">Every device gone</h3>
   <div class="screens">
@@ -242,7 +280,6 @@
       <div class="t">Open your journal</div>
       <div class="b">Face ID, or the passkey from your password manager. The keeper key is unwrapped in the browser and the journal decrypts.</div>
       <div class="btn">Unlock with Face ID</div>
-      <div class="btn alt">Use a recovery key</div>
     </div>
     <div class="screen">
       <div class="cap">If even that is gone</div>
@@ -252,35 +289,31 @@
     </div>
   </div>
 
-  <h2>4. The part that surprised me</h2>
-  <p>
-    Working the flows through, this also dissolves the other two pressures without
-    being designed to. If the keeper key is unwrappable on any device behind a
-    biometric, then:
-  </p>
+  <h2>5. The part that surprised me</h2>
+  <p>If the keeper key is unwrappable on any device behind a biometric, then:</p>
   <ul class="plain">
     <li><strong>Any device can show the recovery key.</strong> Not just the one that created the journal.</li>
     <li><strong>Any device can remove another,</strong> because rotation needs the keeper key and now any device can get it. The "removal lives on the Mac" consequence goes away.</li>
-    <li><strong>No device stores the keeper key.</strong> It is unwrapped for the operation and discarded, which is the transient-use idea from earlier but with a Face ID prompt instead of a typed code.</li>
+    <li><strong>No device stores the keeper key.</strong> It is unwrapped for the operation and discarded.</li>
   </ul>
   <p>
-    A lost or stolen device is <em>better</em> off than today, not worse: it cannot
-    unwrap anything without passing your biometric, whereas today a keeper device holds
-    the key outright in its keystore.
+    A lost or stolen device is <em>better</em> off than today, not worse: it cannot unwrap
+    anything without passing your biometric, whereas today a keeper device holds the key
+    outright in its keystore.
   </p>
 
-  <h2>5. What it costs, stated plainly</h2>
+  <h2>6. What it costs, stated plainly</h2>
   <ul class="plain">
-    <li>§6.1 currently says a passkey "must never be presented to the user as protecting journal content". Under this design it genuinely does protect it, so that sentence needs rewriting deliberately rather than quietly bending.</li>
-    <li>Durability of the wrapping secret moves to iCloud Keychain or Google Password Manager. The server still holds ciphertext only and Apple never sees your journal, but if you lose your Apple account and the J1 code, you are out.</li>
-    <li>A device removed from the account keeps the journal it already had. Unchanged from today, and worth saying every time.</li>
-    <li>It hangs entirely on the fingerprint test above. Nothing here is worth specifying until that passes on a home-screen PWA on iOS.</li>
+    <li>§6.1 currently says a passkey "must never be presented to the user as protecting journal content". Under this design it genuinely does, so that sentence needs rewriting deliberately rather than quietly bending.</li>
+    <li>Durability of the wrapping secret moves to iCloud Keychain or Google Password Manager. The server still holds ciphertext only, but if you lose that account and the J1 code, you are out.</li>
+    <li>Not every credential manager supports PRF, and a passkey that authenticates but returns no secret looks like a bug rather than an unsupported setup. So the app must probe before offering the route.</li>
+    <li>A device removed from the account keeps the journal it already had. Unchanged from today.</li>
   </ul>
 
   <p class="lede" style="margin-top:26px">
-    Prototype only. No spec change made, nothing written to the app repo, and per §6.1b
-    this is exactly the kind of feature that has been built and withdrawn twice, so the
-    next step is agreeing the design, not writing it.
+    Prototype only. No spec change made, nothing written to the app repo, and per §6.1b this is
+    exactly the kind of feature that has been built and withdrawn twice, so the next step is
+    agreeing the design, not writing it.
   </p>
 </div>
 
@@ -288,69 +321,83 @@
 (function () {
   "use strict";
 
-  // Fixed inputs. Both must never change: the PRF salt identifies which secret we
-  // are asking for, and the HKDF info string domain-separates this key from any
-  // other key we might one day derive from the same passkey.
   var PRF_SALT = new TextEncoder().encode("journlet.com/prf/keeper/v1");
   var HKDF_INFO = new TextEncoder().encode("journlet/keeper-wrap/v1");
   var HKDF_SALT = new TextEncoder().encode("journlet/hkdf/v1");
-  var RP_NAME = "Journlet PRF test";
+  var FP_INFO = new TextEncoder().encode("journlet/fingerprint/v1");
 
-  // The site is www.journlet.com and the app is app.journlet.com, which are two
-  // origins. A credential defaults to the full hostname as its RP ID, so a passkey
-  // made here would be invisible to the app and the test would prove nothing about
-  // the real thing. Claiming the registrable domain instead makes one credential
-  // work across every journlet.com subdomain, which is what the design needs.
-  // Omitted on localhost, where claiming journlet.com is not permitted.
+  // The site is www.journlet.com and the app is app.journlet.com, two origins. A credential
+  // defaults to the full hostname, so a passkey made here would be invisible to the app and
+  // the test would prove nothing about the real thing. Claiming the registrable domain makes
+  // one credential work across every journlet.com subdomain. Omitted on localhost, where
+  // claiming journlet.com is not permitted.
   var RP_ID = /(^|\.)journlet\.com$/.test(location.hostname) ? "journlet.com" : undefined;
 
-  var logEl = document.getElementById("log");
-  var lines = [];
-  function log(msg) {
-    lines.push(msg);
-    logEl.textContent = lines.join("\n");
-    logEl.scrollTop = logEl.scrollHeight;
-  }
-  function fail(msg, e) {
-    log("FAILED: " + msg + (e ? " — " + (e && e.message ? e.message : String(e)) : ""));
-  }
+  var $ = function (id) { return document.getElementById(id); };
+  var logEl = $("log"), lines = [];
+  function log(m) { lines.push(m); logEl.textContent = lines.join("\n"); logEl.scrollTop = 1e6; }
 
   function b64(buf) {
     var b = new Uint8Array(buf), s = "";
     for (var i = 0; i < b.length; i++) s += String.fromCharCode(b[i]);
     return btoa(s);
   }
+  function hex(buf, n) {
+    var b = new Uint8Array(buf), s = "";
+    for (var i = 0; i < Math.min(n, b.length); i++) s += b[i].toString(16).padStart(2, "0");
+    return s;
+  }
 
-  // ---- environment readout -------------------------------------------------
+  function verdict(kind, title, body) {
+    var d = document.createElement("div");
+    d.className = "verdict " + kind;
+    var b = document.createElement("b"); b.textContent = title;
+    d.appendChild(b);
+    d.appendChild(document.createTextNode(body));
+    $("verdicts").appendChild(d);
+  }
+
+  // ---- device label --------------------------------------------------------
   var standalone =
     (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
     window.navigator.standalone === true;
 
-  var rows = [
-    ["Origin", location.origin || "file://"],
-    ["Relying party ID (what the passkey binds to)",
-      RP_ID || (location.hostname || "n/a") + " (defaulted, single origin only)"],
-    ["Secure context", window.isSecureContext],
-    ["In an iframe", window.self !== window.top],
-    ["Display mode", standalone ? "standalone (home-screen app) — this is the §11 Q11 case" : "browser tab"],
-    ["WebAuthn available", !!(window.PublicKeyCredential)],
-    ["WebCrypto available", !!(window.crypto && window.crypto.subtle)]
-  ];
+  function guessLabel() {
+    var ua = navigator.userAgent, plat = "Device";
+    if (/iPhone/.test(ua)) plat = "iPhone";
+    else if (/iPad/.test(ua)) plat = "iPad";
+    else if (/Macintosh/.test(ua)) plat = "Mac";
+    else if (/Android/.test(ua)) plat = "Android";
+    else if (/Windows/.test(ua)) plat = "Windows";
+    var br = "browser";
+    if (standalone) br = "home-screen app";
+    else if (/CriOS|Chrome/.test(ua) && !/Edg|OPR/.test(ua)) br = "Chrome";
+    else if (/Safari/.test(ua)) br = "Safari";
+    else if (/Firefox|FxiOS/.test(ua)) br = "Firefox";
+    return plat + " " + br;
+  }
+  $("label").value = guessLabel();
 
+  // ---- environment ---------------------------------------------------------
   var tbody = document.querySelector("#env tbody");
   function addRow(label, value) {
     var tr = document.createElement("tr");
-    var td1 = document.createElement("td");
-    td1.textContent = label;
-    var td2 = document.createElement("td");
-    if (value === true) { td2.textContent = "yes"; td2.className = "yes"; }
-    else if (value === false) { td2.textContent = "no"; td2.className = "no"; }
-    else { td2.textContent = String(value); td2.className = "mono"; }
-    tr.appendChild(td1); tr.appendChild(td2); tbody.appendChild(tr);
-    return td2;
+    var a = document.createElement("td"); a.textContent = label;
+    var b = document.createElement("td");
+    if (value === true) { b.textContent = "yes"; b.className = "yes"; }
+    else if (value === false) { b.textContent = "no"; b.className = "no"; }
+    else { b.textContent = String(value); b.className = "mono"; }
+    tr.appendChild(a); tr.appendChild(b); tbody.appendChild(tr);
+    return b;
   }
-  rows.forEach(function (r) { addRow(r[0], r[1]); });
-
+  addRow("Origin", location.origin || "file://");
+  addRow("Relying party ID (what the passkey binds to)",
+         RP_ID || (location.hostname || "n/a") + " (defaulted, single origin only)");
+  addRow("Secure context", window.isSecureContext);
+  addRow("In an iframe", window.self !== window.top);
+  addRow("Display mode", standalone ? "standalone (home-screen app) — the §11 Q11 case" : "browser tab");
+  addRow("WebAuthn available", !!window.PublicKeyCredential);
+  addRow("WebCrypto available", !!(window.crypto && window.crypto.subtle));
   var platCell = addRow("Platform authenticator", "checking…");
   if (window.PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
     PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
@@ -358,143 +405,221 @@
       .catch(function () { platCell.textContent = "unknown"; platCell.className = "huh"; });
   } else { platCell.textContent = "no"; platCell.className = "no"; }
 
-  if (!window.isSecureContext) {
-    log("This page is not in a secure context, so WebAuthn will refuse. Serve it over https.");
-  }
-  if (window.self !== window.top) {
-    log("This page is in an iframe. Passkey creation is usually blocked by permissions policy here — open it in its own tab on an https origin.");
-  }
+  if (!window.isSecureContext) log("Not a secure context. WebAuthn will refuse. Serve over https.");
+  if (window.self !== window.top) log("In an iframe. Passkey creation is usually blocked here. Open in its own tab.");
 
-  // ---- the probe -----------------------------------------------------------
-  var credentialId = null;   // in memory only; the passkey is discoverable so this is a convenience
-  var lastSecret = null;     // raw PRF output, kept only for the wrap demo
-  var lastFingerprint = null;
+  // ---- state ---------------------------------------------------------------
+  var credentialId = null;     // ArrayBuffer, in memory only
+  var lastSecret = null;
+  var history = [];            // {what, cred, fp}
+  var createdHere = false;
 
-  async function createPasskey() {
-    var userId = crypto.getRandomValues(new Uint8Array(16));
-    var challenge = crypto.getRandomValues(new Uint8Array(32));
-    var opts = {
-      challenge: challenge,
-      rp: RP_ID ? { name: RP_NAME, id: RP_ID } : { name: RP_NAME },
-      user: { id: userId, name: "prf-probe", displayName: "Journlet PRF test" },
-      pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
-      authenticatorSelection: {
-        residentKey: "required",          // discoverable, so we can find it after a reload
-        userVerification: "required"      // the biometric is the whole gate
-      },
-      timeout: 60000,
-      extensions: { prf: {} }             // ask for PRF; evaluation happens on get()
-    };
-    log("Creating passkey on " + (location.origin || "(no origin)") + " …");
-    var cred = await navigator.credentials.create({ publicKey: opts });
-    credentialId = cred.rawId;
-    var ext = cred.getClientExtensionResults();
-    var enabled = ext && ext.prf && ext.prf.enabled;
-    log("Passkey created. PRF reported at creation: " +
-        (enabled === true ? "enabled" : enabled === false ? "NOT enabled" : "not reported (normal on Safari — step 2 is the real test)"));
-    return cred;
-  }
-
-  async function derive() {
-    var challenge = crypto.getRandomValues(new Uint8Array(32));
-    var opts = {
-      challenge: challenge,
-      timeout: 60000,
-      rpId: RP_ID,
-      userVerification: "required",
-      // Empty allowCredentials: let the platform offer the discoverable passkey,
-      // so this works after a reload and on a device that never held the id.
-      allowCredentials: credentialId ? [{ type: "public-key", id: credentialId }] : [],
-      extensions: { prf: { eval: { first: PRF_SALT } } }
-    };
-    var assertion = await navigator.credentials.get({ publicKey: opts });
-    var ext = assertion.getClientExtensionResults();
-    if (!ext || !ext.prf || !ext.prf.results || !ext.prf.results.first) {
-      throw new Error("no PRF result returned — this authenticator or browser does not support it here");
+  function renderHistory() {
+    var tb = document.querySelector("#hist tbody");
+    tb.textContent = "";
+    if (!history.length) {
+      var tr = document.createElement("tr"), td = document.createElement("td");
+      td.colSpan = 3; td.className = "lede"; td.textContent = "Nothing yet.";
+      tr.appendChild(td); tb.appendChild(tr); return;
     }
-    credentialId = assertion.rawId;
-    return ext.prf.results.first;
+    history.forEach(function (r) {
+      var tr = document.createElement("tr");
+      [r.what, r.cred, r.fp].forEach(function (v, i) {
+        var td = document.createElement("td");
+        td.textContent = v;
+        if (i) td.className = "mono";
+        tr.appendChild(td);
+      });
+      tb.appendChild(tr);
+    });
+    // Same credential must always give the same fingerprint.
+    var byCred = {};
+    var broken = false;
+    history.forEach(function (r) {
+      if (!r.cred || r.cred === "—") return;
+      if (byCred[r.cred] && byCred[r.cred] !== r.fp) broken = true;
+      byCred[r.cred] = r.fp;
+    });
+    if (broken) verdict("bad", "The same passkey gave two different secrets.",
+      "PRF is not stable on this device, which breaks the design outright. Nothing else matters until this is understood.");
   }
 
-  // Raw PRF output is input keying material, never a key. HKDF it into one.
+  function showResult(fp, cred) {
+    $("fpBox").hidden = false;
+    $("fp").textContent = fp;
+    $("resultCode").textContent = "FP:" + fp + " CRED:" + cred;
+  }
+
+  // ---- crypto --------------------------------------------------------------
   async function keyFromSecret(secret) {
     var ikm = await crypto.subtle.importKey("raw", secret, "HKDF", false, ["deriveKey", "deriveBits"]);
     return crypto.subtle.deriveKey(
       { name: "HKDF", hash: "SHA-256", salt: HKDF_SALT, info: HKDF_INFO },
-      ikm,
-      { name: "AES-GCM", length: 256 },
-      false,
-      ["encrypt", "decrypt"]
+      ikm, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]
     );
   }
-
   async function fingerprint(secret) {
     var ikm = await crypto.subtle.importKey("raw", secret, "HKDF", false, ["deriveBits"]);
     var bits = await crypto.subtle.deriveBits(
-      { name: "HKDF", hash: "SHA-256", salt: HKDF_SALT, info: new TextEncoder().encode("journlet/fingerprint/v1") },
-      ikm, 256
-    );
-    var h = new Uint8Array(await crypto.subtle.digest("SHA-256", bits));
-    var out = "";
-    for (var i = 0; i < 4; i++) out += h[i].toString(16).padStart(2, "0");
-    return out.toUpperCase();
+      { name: "HKDF", hash: "SHA-256", salt: HKDF_SALT, info: FP_INFO }, ikm, 256);
+    var h = await crypto.subtle.digest("SHA-256", bits);
+    return hex(h, 4).toUpperCase();
   }
 
-  document.getElementById("bCreate").addEventListener("click", async function () {
+  // ---- webauthn ------------------------------------------------------------
+  async function createPasskey() {
+    var name = ($("label").value || "Journlet PRF test").trim();
+    var opts = {
+      challenge: crypto.getRandomValues(new Uint8Array(32)),
+      rp: RP_ID ? { name: "Journlet PRF test", id: RP_ID } : { name: "Journlet PRF test" },
+      user: {
+        id: crypto.getRandomValues(new Uint8Array(16)),
+        name: name,
+        displayName: name
+      },
+      pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
+      authenticatorSelection: { residentKey: "required", userVerification: "required" },
+      timeout: 60000,
+      extensions: { prf: {} }
+    };
+    log("Creating a passkey named \"" + name + "\" on " + (location.origin || "(none)") + " …");
+    var cred = await navigator.credentials.create({ publicKey: opts });
+    credentialId = cred.rawId;
+    createdHere = true;
+    var ext = cred.getClientExtensionResults();
+    var en = ext && ext.prf && ext.prf.enabled;
+    log("Created. PRF at creation: " +
+      (en === true ? "enabled" : en === false ? "NOT enabled" : "not reported (normal on Safari; Derive is the real test)"));
+    return cred;
+  }
+
+  async function derive() {
+    var opts = {
+      challenge: crypto.getRandomValues(new Uint8Array(32)),
+      timeout: 60000,
+      rpId: RP_ID,
+      userVerification: "required",
+      // Empty when this device has not made one, so the platform offers whatever
+      // discoverable passkey exists, including one synced from another device.
+      allowCredentials: credentialId ? [{ type: "public-key", id: credentialId }] : [],
+      extensions: { prf: { eval: { first: PRF_SALT } } }
+    };
+    var a = await navigator.credentials.get({ publicKey: opts });
+    var ext = a.getClientExtensionResults();
+    if (!ext || !ext.prf || !ext.prf.results || !ext.prf.results.first) {
+      throw new Error("no PRF result returned; this credential manager does not support it here");
+    }
+    credentialId = a.rawId;
+    return { secret: ext.prf.results.first, cred: hex(a.rawId, 6) };
+  }
+
+  // ---- buttons -------------------------------------------------------------
+  $("bCreate").addEventListener("click", async function () {
+    if (createdHere && !confirm(
+      "You have already created a passkey on this device.\n\n" +
+      "Another one will be a completely separate credential with its own secret, and it will " +
+      "not match anything. Create another anyway?")) return;
     this.disabled = true;
     try { await createPasskey(); }
-    catch (e) { fail("could not create the passkey", e); }
+    catch (e) { log("FAILED to create: " + (e && e.message ? e.message : e)); }
     this.disabled = false;
   });
 
-  document.getElementById("bDerive").addEventListener("click", async function () {
+  $("bDerive").addEventListener("click", async function () {
     this.disabled = true;
     try {
       log("Deriving, first time…");
-      var a = await derive();
-      log("Got " + new Uint8Array(a).byteLength + " bytes.");
+      var r1 = await derive();
+      log("Got 32 bytes from credential " + r1.cred + ".");
       log("Deriving again, to check it is stable…");
-      var b = await derive();
-      var same = b64(a) === b64(b);
-      log(same
-        ? "Both derivations match. The secret is stable on this device."
-        : "MISMATCH between the two derivations. The secret is not stable, so it cannot wrap anything.");
-      lastSecret = a;
-      lastFingerprint = await fingerprint(a);
-      document.getElementById("fpBox").hidden = false;
-      document.getElementById("fp").textContent = lastFingerprint;
-      log("Fingerprint: " + lastFingerprint + " — compare this against your other device.");
+      var r2 = await derive();
+      var stable = b64(r1.secret) === b64(r2.secret);
+      lastSecret = r1.secret;
+      var fp = await fingerprint(r1.secret);
+      showResult(fp, r1.cred);
+      history.push({ what: "derive", cred: r1.cred, fp: fp });
+      renderHistory();
+      if (stable) {
+        verdict("good", "Stable on this device.",
+          "Two separate derivations from the same passkey gave the same secret. Now compare the result code against your other device.");
+      } else {
+        verdict("bad", "Not stable on this device.",
+          "Two derivations from the same passkey gave different secrets, so nothing can be wrapped with it.");
+      }
+      log("Fingerprint " + fp + ", credential " + r1.cred + ".");
     } catch (e) {
-      fail("could not derive a secret", e);
-      log("If this failed but step 1 worked, PRF is the missing piece here, not passkeys.");
+      log("FAILED to derive: " + (e && e.message ? e.message : e));
+      verdict("warn", "No secret came back.",
+        "If creating worked but this did not, PRF is the missing piece here rather than passkeys. That is a supported-configuration answer, not a bug.");
     }
     this.disabled = false;
   });
 
-  document.getElementById("bWrap").addEventListener("click", async function () {
+  $("bWrap").addEventListener("click", async function () {
     this.disabled = true;
     try {
-      if (!lastSecret) { log("Run step 2 first."); this.disabled = false; return; }
-      // Stand-in for Journlet's keeper key: 256 random bits.
+      if (!lastSecret) { log("Press Derive first."); this.disabled = false; return; }
       var keeper = crypto.getRandomValues(new Uint8Array(32));
-      log("Keeper key (pretend): " + b64(keeper));
-      var wrapKey = await keyFromSecret(lastSecret);
       var iv = crypto.getRandomValues(new Uint8Array(12));
-      var wrapped = await crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, wrapKey, keeper);
-      log("Wrapped, " + wrapped.byteLength + " bytes. This is what the server would hold, and it is all it would hold.");
-      // Now do it the way a fresh device would: derive again, unwrap.
+      var wrapped = await crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, await keyFromSecret(lastSecret), keeper);
+      log("Keeper key wrapped into " + wrapped.byteLength + " bytes. That is all the server would ever hold.");
       log("Deriving again as a fresh device would, then unwrapping…");
-      var secret2 = await derive();
-      var unwrapKey = await keyFromSecret(secret2);
-      var out = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, unwrapKey, wrapped);
-      var ok = b64(out) === b64(keeper);
-      log(ok
-        ? "Unwrapped and it matches. End to end, this works on this device."
-        : "Unwrapped but the bytes differ, which should be impossible — investigate.");
-    } catch (e) {
-      fail("wrap/unwrap did not complete", e);
-    }
+      var r = await derive();
+      var out = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, await keyFromSecret(r.secret), wrapped);
+      if (b64(out) === b64(keeper)) {
+        verdict("good", "Wrapped and unwrapped successfully.",
+          "The keeper key survived a full round trip through a passkey-derived key on this device.");
+      } else {
+        verdict("bad", "Unwrapped, but the bytes differ.", "That should be impossible. Worth investigating.");
+      }
+    } catch (e) { log("FAILED to wrap: " + (e && e.message ? e.message : e)); }
     this.disabled = false;
+  });
+
+  $("bForget").addEventListener("click", function () {
+    credentialId = null;
+    createdHere = false;
+    log("Forgotten. The next Derive will offer every passkey for this site, as a fresh device would see it.");
+  });
+
+  $("bCopy").addEventListener("click", function () {
+    var t = $("resultCode").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(t).then(
+      function () { log("Result code copied."); },
+      function () { log("Clipboard blocked. Read it off the screen."); });
+  });
+
+  $("bCompare").addEventListener("click", function () {
+    var mine = $("resultCode").textContent;
+    var theirs = $("compareIn").value.trim().toUpperCase();
+    var out = $("compareOut");
+    out.textContent = "";
+    if (!mine) { out.textContent = "Press Derive on this device first."; return; }
+    var mf = /FP:([0-9A-F]+)/.exec(mine), mc = /CRED:([0-9a-f]+)/.exec(mine);
+    var tf = /FP:([0-9A-F]+)/.exec(theirs), tc = /CRED:([0-9A-F]+)/i.exec(theirs);
+    if (!tf || !tc) { out.textContent = "That does not look like a result code. Paste the whole line."; return; }
+    var sameCred = mc[1].toLowerCase() === tc[1].toLowerCase();
+    var sameFp = mf[1] === tf[1];
+    var d = document.createElement("div");
+    d.className = "verdict " + (sameCred && sameFp ? "good" : sameCred ? "bad" : "warn");
+    var b = document.createElement("b");
+    if (sameCred && sameFp) {
+      b.textContent = "Proven. The secret syncs.";
+      d.appendChild(b);
+      d.appendChild(document.createTextNode(
+        "Same credential, same secret, on two devices. That is the load-bearing assumption confirmed, and the design stands up."));
+    } else if (sameCred) {
+      b.textContent = "The same passkey gave different secrets on the two devices.";
+      d.appendChild(b);
+      d.appendChild(document.createTextNode(
+        "This is the genuine failure case. The credential syncs but its PRF output does not, so it cannot wrap anything."));
+    } else {
+      b.textContent = "These are two different passkeys, so this comparison proves nothing.";
+      d.appendChild(b);
+      d.appendChild(document.createTextNode(
+        "Different secrets are the correct result for different credentials. Delete the extra passkeys, create exactly one, and press Derive on the other device without creating anything there."));
+    }
+    out.appendChild(d);
   });
 })();
 </script>
