@@ -72,6 +72,14 @@
         activity, which can include the IP address and browser used to sign in.
       </p>
       <p>
+        Since 6 August 2026 it also keeps a running total of how much space your journal takes on
+        the server, the limit that total counts against, and the time the total last changed. The
+        first two are there so that one account cannot fill the database and stop everyone else
+        writing; the app shows them to you on the Menu. The third is worth naming plainly rather
+        than calling it bookkeeping: because the total changes whenever you write, its timestamp
+        says roughly when you last wrote something. It says nothing about what.
+      </p>
+      <p>
         The updates are encrypted with AES-GCM using a data key generated on your device. That
         data key is itself encrypted with a second key, shown to you as your journal key, and the
         encrypted result is what the server stores. To be precise about the distinction, because
@@ -257,7 +265,7 @@
         history is public in the site's source repository.
       </p>
 
-      <p class="meta">Last updated 5 August 2026.</p>
+      <p class="meta">Last updated 7 August 2026.</p>
     </main>
   </body>
 </html>
