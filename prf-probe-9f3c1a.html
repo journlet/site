@@ -510,7 +510,20 @@
       throw new Error("no PRF result returned; this credential manager does not support it here");
     }
     credentialId = a.rawId;
-    return { secret: ext.prf.results.first, cred: hex(a.rawId, 6) };
+    // Where the answer came from. Added 13 August 2026, because a run whose transport
+    // was not recorded is a run that gets argued about: a Google Password Manager
+    // credential returns one secret when a browser reaches it locally and another
+    // through the cross-device tunnel, and every wrong theory that day came from not
+    // knowing which path an attempt had taken (spec §6.1k).
+    return {
+      secret: ext.prf.results.first,
+      cred: hex(a.rawId, 6),
+      via: a.authenticatorAttachment === "platform"
+        ? "this device"
+        : a.authenticatorAttachment === "cross-platform"
+          ? "another device (QR)"
+          : "not reported"
+    };
   }
 
   // ---- buttons -------------------------------------------------------------
@@ -530,23 +543,26 @@
     try {
       log("Deriving, first time…");
       var r1 = await derive();
-      log("Got 32 bytes from credential " + r1.cred + ".");
+      log("Got 32 bytes from credential " + r1.cred + ", answered by " + r1.via + ".");
       log("Deriving again, to check it is stable…");
       var r2 = await derive();
       var stable = b64(r1.secret) === b64(r2.secret);
       lastSecret = r1.secret;
       var fp = await fingerprint(r1.secret);
       showResult(fp, r1.cred);
-      history.push({ what: "derive", cred: r1.cred, fp: fp });
+      history.push({ what: "derive (" + r1.via + ")", cred: r1.cred, fp: fp });
       renderHistory();
       if (stable) {
         verdict("good", "Stable on this device.",
-          "Two separate derivations from the same passkey gave the same secret. Now compare the result code against your other device.");
+          "Two separate derivations from the same passkey gave the same secret, both answered by " +
+          r1.via + ". Compare the result code against the same passkey reached another way — " +
+          "another device, and the QR route — since the secret is known to differ across " +
+          "transports for at least one password manager.");
       } else {
         verdict("bad", "Not stable on this device.",
           "Two derivations from the same passkey gave different secrets, so nothing can be wrapped with it.");
       }
-      log("Fingerprint " + fp + ", credential " + r1.cred + ".");
+      log("Fingerprint " + fp + ", credential " + r1.cred + ", via " + r1.via + ".");
     } catch (e) {
       log("FAILED to derive: " + (e && e.message ? e.message : e));
       verdict("warn", "No secret came back.",
