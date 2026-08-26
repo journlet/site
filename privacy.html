@@ -46,6 +46,7 @@
         <li>There is no analytics, no tracking and no advertising, on this site or in the app.</li>
         <li>An account is needed to start. After that the journal lives on your device and works with no connection at all.</li>
         <li>You can have your account and everything the server holds deleted, by asking us.</li>
+        <li>Feedback is voluntary, sent from your own mail app, and carries nothing from your journal.</li>
       </ul>
 
       <h2>What is stored, and where</h2>
@@ -56,7 +57,7 @@
       </p>
       <p>
         Also on your device, in ordinary browser storage: your theme choice, which page you were
-        last on, and similar small preferences. If you link a device by scanning its QR code, your
+        last on, an unsent feedback draft if you have started one, and similar small preferences. If you link a device by scanning its QR code, your
         journal key is held there while you sign in. Thirty minutes after the scan it stops being
         accepted, and it is erased at that point if the app is still open or you come back to it.
         If you close the browser before then and never open the app again, it stays in that storage
@@ -121,8 +122,8 @@
 
       <h2>Accounts and email</h2>
       <p>
-        Signing in uses a magic link sent to your email address. There are no passwords. Your
-        email address is used to authenticate you and to send those links, and for nothing else.
+        Signing in uses a one-time code sent to your email address. There are no passwords. Your
+        email address is used to authenticate you and to send those codes, and for nothing else.
         You will not receive marketing from Journlet.
       </p>
 
@@ -153,9 +154,38 @@
       </p>
       <p>
         The app talks to exactly one other place: the Supabase project that holds your ciphertext.
-        Asking for a sign-in link sends your email address there before you have an account, which
-        is unavoidable — it is how the link reaches you. Until you do that, nothing you write
+        Asking for a sign-in code sends your email address there before you have an account, which
+        is unavoidable: it is how the code reaches you. Until you do that, nothing you write
         leaves the device.
+      </p>
+
+      <h2 id="feedback">Feedback and support</h2>
+      <p>
+        Writing to <a href="mailto:hello@journlet.com">hello@journlet.com</a> is
+        ordinary email, not part of the app. The app never sends it for you: the
+        Send feedback screen composes a message and hands it to your own mail app,
+        where you can read it, change it, or abandon it. Nothing reaches the
+        operator until you send it yourself.
+      </p>
+      <p>
+        What arrives is what you wrote, your email address, because that is how
+        email works, and the report block if you chose to leave it in. That block
+        holds the build you are running, whether the app is installed or in a
+        browser tab, how your browser describes itself, the size of the window, the
+        sync state, the last error the server gave, and a count and a size for your
+        journal. It holds no entries and no page names, and it is shown to you in
+        full, editable, before it goes anywhere.
+      </p>
+      <p>
+        An unsent draft is kept in your browser's own storage on that device, so it
+        survives being offline or closing the app. It is not added to your journal
+        and never reaches the server.
+      </p>
+      <p>
+        Correspondence is kept in the mailbox for as long as it takes to deal with
+        what you raised, and where it records a fault still outstanding, until that
+        is fixed. Anything older than twelve months is deleted. Ask and yours goes
+        sooner. It is never used for marketing, and there is none to use it for.
       </p>
 
       <h2 id="your-data">Your data, and getting rid of it</h2>
@@ -218,8 +248,15 @@
       <p>
         Under UK GDPR, processing your email address and storing your encrypted journal is done to
         perform the service you asked for: the lawful basis is performance of a contract, Article
-        6(1)(b). No processing here relies on consent or on legitimate interests, which is a
-        consequence of there being no analytics, no marketing and no profiling to justify.
+        6(1)(b). No processing here relies on consent, and none of it involves analytics, marketing
+        or profiling.
+      </p>
+      <p>
+        Correspondence is the one exception, and it is named here rather than folded into the line
+        above. If you email feedback or a bug report, replying to you and acting on it rests on
+        legitimate interests, Article 6(1)(f): running and repairing the app, which is in your
+        interest as much as the operator's, and involves no more of your data than the message you
+        chose to send. You are not obliged to send one, and nothing in the app asks unprompted.
       </p>
       <p>
         If you never sign in, none of your writing is processed by anyone: it stays on your
@@ -239,7 +276,12 @@
         Two other processors are involved. GitHub Pages, operated by Microsoft, serves this
         website and the app, and processes visitors' IP addresses in the United States in the
         course of doing so. Sign-in emails are delivered through Supabase's email provider, which
-        handles your email address and the link in order to deliver the message.
+        handles your email address and the code in order to deliver the message.
+      </p>
+      <p>
+        Email you send to a journlet.com address is held by the provider of that mailbox, in the
+        same way any email you send is held by the recipient's mail provider. Feedback is voluntary
+        and no account is needed to send it, so nothing about it is conditional on having one.
       </p>
 
       <h2>Your rights</h2>
@@ -283,7 +325,7 @@
         history is public in the site's source repository.
       </p>
 
-      <p class="meta">Last updated 11 August 2026.</p>
+      <p class="meta">Last updated 26 August 2026.</p>
     </main>
   </body>
 </html>
