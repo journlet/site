@@ -49,6 +49,18 @@ files, minus Markdown and dotfiles, to GitHub Pages via `.github/workflows/deplo
   spec §6.2. There is no analytics on this page by design; if that changes, it should be a
   deliberate decision rather than a default.
 
+## Contact
+
+The footer, `#contact`, is the contact route spec §13.1 requires, and it is here as well as in
+the app for one reason: the app's own *Send feedback* screen sits behind the Menu, so the reports
+worth most, the app will not load, sign-in will not complete, the mailbox behind the account is
+gone, cannot be sent from inside it. `hello@journlet.com` is feedback and support;
+`privacy@journlet.com` stays the data-protection address, and the privacy page now has a
+*Feedback and support* section saying what a message holds and how long it is kept.
+
+The "no footer" note that stood in `styles.css` said one would come back when there was a privacy
+policy and a contact address to put in it. Both now exist, so it has.
+
 ## /privacy
 
 Complete as of 27 July 2026: controller named, postal address given, contact via a

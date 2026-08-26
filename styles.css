@@ -418,9 +418,36 @@ h3 {
   text-decoration: none;
 }
 
-/* No footer: the install band is the last thing on the page, so it ends on
-   something to do. A footer comes back when there is a privacy policy and a
-   contact address to put in it. */
+/* ---------- footer ---------- */
+
+/* The note that stood here said a footer comes back when there is a privacy policy
+   and a contact address to put in it. Both now exist, and the contact route is a
+   launch requirement (spec §13.1) rather than decoration, so it is a footer and not
+   a line of small print. Paper rather than surface: the install band above it is
+   surface, and two surface bands touching read as one. */
+.foot {
+  border-top: 1px solid var(--line);
+  padding-block: 30px 42px;
+}
+.foot h2 {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+.foot p {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  max-width: 62ch;
+  margin: 0 0 10px;
+}
+.foot .last {
+  margin-bottom: 0;
+}
+.foot strong {
+  color: var(--ink);
+  font-weight: 600;
+}
 
 /* ---------- narrow ---------- */
 

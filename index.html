@@ -81,6 +81,7 @@
       <nav aria-label="Primary">
         <a href="#notation">The notation</a>
         <a href="/privacy">Privacy</a>
+        <a href="#contact">Contact</a>
         <a href="https://app.journlet.com/">Open Journlet</a>
       </nav>
     </header>
@@ -191,5 +192,38 @@
        </div>
       </section>
     </main>
+
+    <!--
+      The contact route (spec §13.1). Here as well as in the app because the app's
+      own feedback screen sits behind the Menu, and the reports worth most are the
+      ones from somebody who cannot get that far: the app will not load, sign-in
+      will not complete, the mailbox behind the account is gone. None of those can
+      be reported from inside.
+    -->
+    <footer class="foot" id="contact">
+      <div class="wrap">
+        <h2>Something wrong, or something missing?</h2>
+        <p>
+          Email <a href="mailto:hello@journlet.com">hello@journlet.com</a>. A person
+          reads it. Bug reports, things the notation gets wrong, features you keep
+          reaching for and cannot find: all welcome, and none of it needs to be
+          polite about it.
+        </p>
+        <p>
+          If the app opens for you, <strong>Menu &rarr; Send feedback</strong> is
+          quicker. It fills in the build and the sync state for you, shows you the
+          whole report before it goes anywhere, and sends nothing from your journal.
+        </p>
+        <p>
+          For anything about your data rather than the app, including deletion,
+          <a href="mailto:privacy@journlet.com">privacy@journlet.com</a> is the
+          right address, and <a href="/privacy">the privacy page</a> says what is
+          held and for how long.
+        </p>
+        <p class="last">
+          Journlet is an independent project by Gary Rutland, not a company.
+        </p>
+      </div>
+    </footer>
   </body>
 </html>
