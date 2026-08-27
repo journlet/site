@@ -438,10 +438,29 @@ h3 {
 .foot p {
   font-size: 13.5px;
   color: var(--ink-soft);
-  max-width: 62ch;
   margin: 0 0 10px;
 }
+/* Three contact routes on the same three-column grid as .pillars and
+   .install-grid. As one running column the paragraphs were capped at a reading
+   measure, which is right for the line length and wrong for the band: a lone
+   left column under two three-column grids reads as a layout that ran out. The
+   columns fill the width without making a single line any longer. */
+.foot-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+  margin-bottom: 26px;
+}
+.foot-cols h3 {
+  font-size: 15px;
+  margin: 0 0 6px;
+}
+.foot-cols p:last-child {
+  margin-bottom: 0;
+}
 .foot .last {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
   margin-bottom: 0;
 }
 .foot strong {
@@ -457,7 +476,8 @@ h3 {
   }
   .hero,
   .pillars,
-  .install-grid {
+  .install-grid,
+  .foot-cols {
     grid-template-columns: 1fr;
   }
   .notation {
